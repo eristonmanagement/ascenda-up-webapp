@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Mensagem de boas-vindas
 bot.start((ctx) =>
-  ctx.reply(""Olá, Sou o Ascenda Up, seu mentor no Telegram. Vou te ajudar a dar um Up na carreira!"")
+  ctx.reply("Olá, Sou o Ascenda Up, seu mentor no Telegram. Vou te ajudar a dar um Up na carreira!")
 );
 
 // Encaminhar mensagens para o DocsBot
