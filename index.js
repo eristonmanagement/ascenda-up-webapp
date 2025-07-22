@@ -34,3 +34,23 @@ bot.on("text", async (ctx) => {
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error("Erro na resposta do DocsBot:", response.status, errorText);
+      return ctx.reply("Não consegui obter resposta do mentor agora. Tente novamente mais tarde.");
+    }
+
+    const data = await response.json();
+    ctx.reply(data.answer || "Não consegui encontrar uma resposta no momento.");
+  } catch (err) {
+    console.error("Erro ao se conectar com o DocsBot:", err);
+    ctx.reply("Ocorreu um erro técnico. Tente novamente.");
+  }
+});
+
+// Webhook e porta
+app.use(bot.webhookCallback("/bot"));
+bot.telegram.setWebhook(`${process.env.RENDER_EXTERNAL_URL}/bot`);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor do Ascenda Mentor ativo na porta ${PORT}`);
+});
