@@ -18,7 +18,7 @@ bot.on("text", async (ctx) => {
 
   try {
     const response = await fetch(
-  `https://api.docsbot.ai/api/v1/chat/${process.env.DOCSBOT_BOT_ID}`, // sem Doc ID
+      `https://api.docsbot.ai/api/v1/chat/${process.env.DOCSBOT_BOT_ID}`,
       {
         method: "POST",
         headers: {
@@ -32,11 +32,17 @@ bot.on("text", async (ctx) => {
       }
     );
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Erro na resposta do DocsBot:", response.status, errorText);
+      return ctx.reply("Não consegui obter resposta do mentor agora. Tente novamente mais tarde.");
+    }
+
     const data = await response.json();
     ctx.reply(data.answer || "Não consegui encontrar uma resposta no momento.");
   } catch (err) {
-    console.error(err);
-    ctx.reply("Ocorreu um erro. Tente novamente.");
+    console.error("Erro ao se conectar com o DocsBot:", err);
+    ctx.reply("Ocorreu um erro técnico. Tente novamente.");
   }
 });
 
