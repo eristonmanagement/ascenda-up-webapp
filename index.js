@@ -5,7 +5,7 @@ const fetch = require("node-fetch");
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 // Comando simples de boas-vindas
-bot.start((ctx) => ctx.reply("Olá! Sou o Ascenda Mentor no Telegram. Como posso te ajudar?"));
+bot.start((ctx) => ctx.reply("Olá, Sou o Ascenda Up, seu mentor no Telegram. Vou te ajudar a dar um Up na carreira!"));
 
 // Reencaminhar mensagens para a API do DocsBot
 bot.on("text", async (ctx) => {
