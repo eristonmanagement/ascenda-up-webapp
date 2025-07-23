@@ -42,6 +42,7 @@
       border: none;
       border-radius: 8px;
       font-size: 1rem;
+      width: 100%;
     }
     .password-container {
       position: relative;
@@ -53,8 +54,8 @@
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #E6E6FA;
-      font-size: 0.9rem;
+      color: #ffffff;
+      font-size: 1.1rem;
       cursor: pointer;
     }
     button {
@@ -88,7 +89,7 @@
     <input type="email" id="email" placeholder="Seu e-mail" required />
     <div class="password-container">
       <input type="password" id="senha" placeholder="Senha" required />
-      <button type="button" class="toggle-password" id="toggleSenha">👁️</button>
+      <button type="button" class="toggle-password" id="toggleSenha" aria-label="Mostrar senha">👁️</button>
     </div>
     <button type="submit">Entrar</button>
     <a id="resetLink">Esqueci minha senha</a>
@@ -117,25 +118,9 @@
         });
     });
 
-    document.getElementById("resetLink").addEventListener("click", function(e) {
-      e.preventDefault();
-      const email = prompt("Digite seu e-mail para redefinir a senha:");
-      if (email) {
-        sendPasswordResetEmail(auth, email)
-          .then(() => {
-            alert("Um link de redefinição de senha foi enviado para seu e-mail.");
-          })
-          .catch((error) => {
-            alert("Erro ao enviar e-mail: " + error.message);
-          });
-      }
-    });
-
     document.getElementById("toggleSenha").addEventListener("click", function () {
       const senhaInput = document.getElementById("senha");
-      const type = senhaInput.type === "password" ? "text" : "password";
-      senhaInput.type = type;
-      this.textContent = type === "password" ? "👁️" : "🙈";
+      senhaInput.type = senhaInput.type === "password" ? "text" : "password";
     });
   </script>
 </body>
