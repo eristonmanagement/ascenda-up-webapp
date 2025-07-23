@@ -2,74 +2,54 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#1E1E2F" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ascenda Up Mentor</title>
+  <link rel="icon" href="icon.png" type="image/png">
   <style>
-    * {
+    body {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f4f7;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
     }
     header {
-      background-color: #3b1e65;
+      background-color: #3a196c;
       color: white;
-      padding: 1rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      padding: 14px 24px;
     }
     header img {
       height: 32px;
-      width: 32px;
+      margin-right: 14px;
     }
-    header span {
-      font-size: 1.3rem;
-      font-weight: 500;
-    }
-    main {
-      flex: 1;
-      padding: 0;
+    header h1 {
+      font-size: 20px;
+      margin: 0;
     }
     iframe {
       width: 100%;
-      height: 100%;
+      height: calc(100vh - 80px);
       border: none;
     }
     footer {
-      background-color: #e0e0e0;
-      padding: 0.7rem;
       text-align: center;
-      font-size: 0.9rem;
-      color: #333;
+      font-size: 13px;
+      color: #666;
+      padding: 10px;
+      background-color: #f9f9f9;
     }
   </style>
 </head>
 <body>
   <header>
     <img src="icon.png" alt="Ascenda Logo" />
-    <span>Ascenda Up Mentor</span>
+    <h1>Ascenda Up Mentor</h1>
   </header>
 
-  <main>
-    <iframe 
-      src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" 
-      allowtransparency="true" 
-      scrolling="no">
-    </iframe>
-  </main>
+  <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"></iframe>
 
   <footer>
-    Produzido por Eriston Consult & Management
+    Produzido por <strong>Eriston Consult & Management</strong>
   </footer>
 </body>
 </html>
