@@ -1,110 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ascenda Up — Chat</title>
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="icon.png" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f7f7;
-    }
-
-    header {
-      background-color: #391D57;
-      color: white;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .left {
-      display: flex;
-      align-items: center;
-    }
-
-    header img {
-      height: 30px;
-      margin-right: 10px;
-    }
-
-    header h1 {
-      font-size: 1.2rem;
-      margin: 0;
-    }
-
-    .logout-btn {
-      background: none;
-      border: 1px solid #fff;
-      padding: 0.4rem 0.8rem;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    .iframe-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 140px);
-      padding: 1rem;
-      box-sizing: border-box;
-    }
-
-    iframe {
-      width: 100%;
-      max-width: 600px;
-      height: 100%;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.7rem;
-      color: #666;
-      padding: 0.5rem;
-    }
-  </style>
 </head>
 <body>
-  <header>
-    <div class="left">
-      <img src="icon.png" alt="Ascenda Logo" />
-      <h1>Ascenda Up</h1>
-    </div>
-    <button class="logout-btn" id="logoutBtn">Sair</button>
-  </header>
-
-  <div class="iframe-container">
-    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
+  <div class="chat-container">
+    <h1>Bem-vindo ao Ascenda Up</h1>
+    <p id="userEmail"></p>
+    <button id="logoutBtn">Sair</button>
+    <!-- Aqui entraria o chat real com iframe ou integração futura -->
   </div>
 
-  <footer>
-    Produzido por Eriston Consult & Management
-  </footer>
-
+  <!-- Script do Firebase como módulo -->
   <script type="module">
-    import { auth } from '../src/firebase.js';
-    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+    import { auth } from './firebase.js';
+    import { signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
+    const userEmail = document.getElementById('userEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Verifica se o usuário está logado
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userEmail.textContent = "Usuário logado: " + user.email;
+      } else {
+        alert("Sessão expirada. Faça login novamente.");
         window.location.href = "index.html";
       }
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        localStorage.clear();
-        window.location.href = "index.html";
-      });
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
     });
   </script>
 </body>
