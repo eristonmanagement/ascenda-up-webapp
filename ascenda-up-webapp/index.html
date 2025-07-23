@@ -6,27 +6,70 @@
   <meta name="theme-color" content="#1E1E2F" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon.png" type="image/png" />
-  <title>Ascenda Up</title>
+  <title>Ascenda Up Mentor</title>
   <style>
-    html, body {
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
       height: 100%;
-      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f7;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #3b1e65;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    header img {
+      height: 32px;
+      width: 32px;
+    }
+    header span {
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+    main {
+      flex: 1;
+      padding: 0;
     }
     iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
+    footer {
+      background-color: #e0e0e0;
+      padding: 0.7rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #333;
+    }
   </style>
 </head>
 <body>
-  <iframe 
-    src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
-    frameborder="0"
-    allowtransparency="true"
-    scrolling="no">
-  </iframe>
+  <header>
+    <img src="icon.png" alt="Ascenda Logo" />
+    <span>Ascenda Up Mentor</span>
+  </header>
+
+  <main>
+    <iframe 
+      src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" 
+      allowtransparency="true" 
+      scrolling="no">
+    </iframe>
+  </main>
+
+  <footer>
+    Produzido por Eriston Consult & Management
+  </footer>
 </body>
 </html>
