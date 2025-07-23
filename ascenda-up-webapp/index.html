@@ -35,12 +35,27 @@
       gap: 1rem;
       width: 100%;
       max-width: 320px;
+      position: relative;
     }
     input {
       padding: 0.8rem;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
+    }
+    .password-container {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #E6E6FA;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
     button {
       padding: 0.9rem;
@@ -71,7 +86,10 @@
   <h1>Entrar no Ascenda Up</h1>
   <form id="loginForm">
     <input type="email" id="email" placeholder="Seu e-mail" required />
-    <input type="password" id="senha" placeholder="Senha" required />
+    <div class="password-container">
+      <input type="password" id="senha" placeholder="Senha" required />
+      <button type="button" class="toggle-password" id="toggleSenha">👁️</button>
+    </div>
     <button type="submit">Entrar</button>
     <a id="resetLink">Esqueci minha senha</a>
   </form>
@@ -92,7 +110,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           localStorage.setItem("userId", user.uid);
-          window.location.href = "/Chat.html"; // ou chat.html conforme o nome real
+          window.location.href = "/Chat.html";
         })
         .catch((error) => {
           alert("Erro ao fazer login: " + error.message);
@@ -111,6 +129,13 @@
             alert("Erro ao enviar e-mail: " + error.message);
           });
       }
+    });
+
+    document.getElementById("toggleSenha").addEventListener("click", function () {
+      const senhaInput = document.getElementById("senha");
+      const type = senhaInput.type === "password" ? "text" : "password";
+      senhaInput.type = type;
+      this.textContent = type === "password" ? "👁️" : "🙈";
     });
   </script>
 </body>
