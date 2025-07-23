@@ -1,149 +1,138 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up</title>
-  <link rel="icon" type="image/png" href="icon.png"/>
+  <title>Ascenda Up — Chat</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #f7f7f7;
-      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #320b86, #1c0033);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-
     header {
-      background-color: #391D57;
-      color: white;
+      background-color: #1c0033;
       padding: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header .left {
-      display: flex;
-      align-items: center;
-    }
-
-    header img {
-      height: 30px;
-      margin-right: 10px;
-    }
-
-    header h1 {
+      text-align: center;
+      font-weight: bold;
       font-size: 1.2rem;
-      margin: 0;
+      border-bottom: 1px solid #444;
     }
-
-    .logout-btn {
-      background: none;
-      border: 1px solid #fff;
-      padding: 0.4rem 0.8rem;
-      color: white;
+    main {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .message {
+      margin-bottom: 1rem;
+    }
+    .input-area {
+      display: flex;
+      border-top: 1px solid #444;
+      padding: 1rem;
+      background: #2a0050;
+    }
+    input {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    button {
+      background-color: #E6E6FA;
+      color: #320b86;
+      font-weight: bold;
+      border: none;
+      padding: 0.8rem 1.2rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.85rem;
     }
-
-    .iframe-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 120px);
-      padding: 1rem;
-      box-sizing: border-box;
-    }
-
-    iframe {
-      width: 100%;
-      max-width: 600px;
-      height: 100%;
+    #logout {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background: transparent;
+      color: #ccc;
       border: none;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.7rem;
-      color: #666;
-      padding: 0.5rem;
-      word-wrap: break-word;
-      max-width: 100%;
-      box-sizing: border-box;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="left">
-      <img src="icon.png" alt="Ascenda Logo" />
-      <h1>Ascenda Up</h1>
-    </div>
-    <button class="logout-btn" id="logoutBtn">Sair</button>
+    Ascenda Up — Chat
+    <button id="logout">Sair</button>
   </header>
 
-  <div class="iframe-container">
-    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
+  <main id="chat">
+    <div class="message">👋 Olá! Como posso ajudar na sua jornada profissional?</div>
+  </main>
+
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Digite sua pergunta..." />
+    <button onclick="enviarMensagem()">Enviar</button>
   </div>
 
-  <footer>
-    Produzido por Eriston Consult & Management
-  </footer>
-
   <script type="module">
-    import { auth } from './firebase.js';
-    import {
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const db = getFirestore();
-    const localUserId = localStorage.getItem("userId");
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkgWkJNrLj0ur-bliwxdDoQrikrdCfL7U",
+      authDomain: "ascendaup.firebaseapp.com",
+      projectId: "ascendaup",
+      storageBucket: "ascendaup.appspot.com",
+      messagingSenderId: "934093010271",
+      appId: "1:934093010271:web:59536a45f3ed67ce35f2ea",
+      measurementId: "G-NN8HW8JY8D"
+    };
 
-    function exibirResumo(userId) {
-      const userRef = doc(db, "usuarios", userId);
-      getDoc(userRef).then((docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          alert("Última sessão: " + (data.topico || "sem tópico") + " em " + (data.ultimaSessao?.toDate?.().toLocaleDateString() || "data não registrada"));
-        }
-        setDoc(userRef, {
-          ultimaSessao: serverTimestamp(),
-          topico: "Sessão aberta no chat",
-        }, { merge: true });
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const logoutButton = document.getElementById("logout");
+    logoutButton.addEventListener("click", () => {
+      signOut(auth).then(() => {
+        localStorage.removeItem("userId");
+        window.location.href = "/index.html";
       });
-    }
+    });
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        localStorage.setItem("userId", user.uid);
-        exibirResumo(user.uid);
-      } else if (localUserId) {
-        exibirResumo(localUserId);
-      } else {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
         window.location.href = "/index.html";
       }
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        localStorage.clear();
-        window.location.href = "/index.html";
-      }).catch((error) => {
-        alert("Erro ao sair: " + error.message);
-      });
-    });
+    function enviarMensagem() {
+      const input = document.getElementById("userInput");
+      const texto = input.value.trim();
+      if (texto === "") return;
+
+      const chat = document.getElementById("chat");
+      const div = document.createElement("div");
+      div.className = "message";
+      div.textContent = `Você: ${texto}`;
+      chat.appendChild(div);
+      input.value = "";
+
+      // Aqui você pode integrar com IA ou backend
+      setTimeout(() => {
+        const resposta = document.createElement("div");
+        resposta.className = "message";
+        resposta.textContent = "🤖 Guia: Obrigado pela pergunta! Em breve responderei com um plano de ação.";
+        chat.appendChild(resposta);
+        chat.scrollTop = chat.scrollHeight;
+      }, 500);
+    }
   </script>
 </body>
 </html>
