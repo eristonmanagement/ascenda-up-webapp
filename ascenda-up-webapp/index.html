@@ -1,78 +1,63 @@
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up Mentor</title>
-  <link rel="icon" type="image/png" href="icon.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ascenda Up</title>
+  <link rel="manifest" href="manifest.json" />
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #f7f7f7;
-      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
     }
-
-    header {
-      background-color: #391D57;
+    .header {
+      background-color: #3b1d63;
       color: white;
-      padding: 1rem;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 1rem;
     }
-
-    header img {
+    .header img {
       height: 30px;
-      margin-right: 10px;
     }
-
-    header h1 {
-      font-size: 1.2rem;
-      margin: 0;
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
-
-    .iframe-container {
+    .main {
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: calc(100vh - 140px); /* header + footer */
-      padding: 1rem;
-      box-sizing: border-box;
+      align-items: flex-start;
+      padding: 3rem 2rem;
+      height: 85vh;
     }
-
     iframe {
       width: 100%;
-      max-width: 600px;
+      max-width: 900px;
       height: 100%;
       border: none;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     }
-
-    footer {
+    .footer {
       text-align: center;
-      font-size: 0.85rem;
-      color: #666;
+      font-size: 0.9rem;
+      color: #444;
       padding: 1rem;
-      word-wrap: break-word;
-      max-width: 100%;
-      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
-  <header>
+  <div class="header">
     <img src="icon.png" alt="Ascenda Logo" />
-    <h1>Ascenda Up Mentor</h1>
-  </header>
-
-  <div class="iframe-container">
-    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
+    <span class="header-title">Ascenda Up Mentor</span>
   </div>
-
-  <footer>
-    Produzido por Eriston Consult & Management
-  </footer>
+  <div class="main">
+    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"></iframe>
+  </div>
+  <div class="footer">Produzido por Eriston Consult & Management</div>
 </body>
 </html>
