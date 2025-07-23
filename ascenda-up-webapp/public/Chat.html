@@ -3,126 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up — Chat</title>
+  <title>Ascenda Up</title>
+  <link rel="icon" type="image/png" href="icon.png"/>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(145deg, #320b86, #1c0033);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      overflow-x: hidden;
     }
+
     header {
-      background-color: #1c0033;
+      background-color: #391D57;
+      color: white;
       padding: 1rem;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-      border-bottom: 1px solid #444;
-      position: relative;
-    }
-    main {
-      flex: 1;
-      padding: 1rem;
-      overflow-y: auto;
-    }
-    .message {
-      margin-bottom: 1rem;
-    }
-    .input-area {
       display: flex;
-      border-top: 1px solid #444;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .left {
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid #fff;
+      padding: 0.4rem 0.8rem;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .iframe-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 120px);
       padding: 1rem;
-      background: #2a0050;
+      box-sizing: border-box;
     }
-    input {
-      flex: 1;
-      padding: 0.8rem;
-      border-radius: 6px;
+
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 100%;
       border: none;
-      font-size: 1rem;
-      margin-right: 0.5rem;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
     }
-    button {
-      background-color: #E6E6FA;
-      color: #320b86;
-      font-weight: bold;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    #logout {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      background: transparent;
-      color: #ccc;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      text-decoration: underline;
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #666;
+      padding: 0.5rem;
+      word-wrap: break-word;
+      max-width: 100%;
+      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
   <header>
-    Ascenda Up — Chat
-    <button id="logout">Sair</button>
+    <div class="left">
+      <img src="icon.png" alt="Ascenda Logo" />
+      <h1>Ascenda Up</h1>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
   </header>
 
-  <main id="chat">
-    <div class="message">👋 Olá! Como posso ajudar na sua jornada profissional?</div>
-  </main>
-
-  <div class="input-area">
-    <input type="text" id="userInput" placeholder="Digite sua pergunta..." />
-    <button onclick="enviarMensagem()">Enviar</button>
-  </div>
-
-  <script type="module">
-    import { auth } from './firebase.js';
-    import {
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    const logoutButton = document.getElementById("logout");
-    logoutButton.addEventListener("click", () => {
-      signOut(auth).then(() => {
-        localStorage.removeItem("userId");
-        window.location.href = "/index.html";
-      });
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "/index.html";
-      }
-    });
-
-    function enviarMensagem() {
-      const input = document.getElementById("userInput");
-      const texto = input.value.trim();
-      if (texto === "") return;
-
-      const chat = document.getElementById("chat");
-      const div = document.createElement("div");
-      div.className = "message";
-      div.textContent = `Você: ${texto}`;
-      chat.appendChild(div);
-      input.value = "";
-
-      setTimeout(() => {
-        const resposta = document.createElement("div");
-        resposta.className = "message";
-        resposta.textContent = "🤖 Guia: Obrigado pela pergunta! Em breve responderei com um plano de ação.";
-        chat.appendChild(resposta);
-        chat.scrollTop = chat.scrollHeight;
-      }, 500);
-    }
-  </script>
-</body>
-</html>
+  <div class="iframe-container">
+    <iframe src="https://docsbot.ai/iframe/bUx
