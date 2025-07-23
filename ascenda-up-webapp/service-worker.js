@@ -1,1 +1,3 @@
-// Placeholder for service worker
+self.addEventListener('install', function(e) {
+  console.log('Service Worker instalado');
+});
