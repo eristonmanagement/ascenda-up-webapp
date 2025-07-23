@@ -80,7 +80,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           localStorage.setItem("userId", user.uid);
-          window.location.href = "chat.html";
+          window.location.href = "/Chat.html"; // ou chat.html conforme o nome real
         })
         .catch((error) => {
           alert("Erro ao fazer login: " + error.message);
