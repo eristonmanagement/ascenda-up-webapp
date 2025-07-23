@@ -9,7 +9,7 @@
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #f7f7f7;
     }
 
@@ -47,52 +47,13 @@
       font-size: 0.85rem;
     }
 
-    #chat-history {
-      max-width: 600px;
-      margin: 1rem auto;
-      padding: 1rem;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.05);
-      min-height: 100px;
-    }
-
-    .msg {
-      margin-bottom: 0.5rem;
-      background: #eee;
-      padding: 0.6rem;
-      border-radius: 6px;
-    }
-
-    .input-box {
-      display: flex;
-      justify-content: center;
-      margin: 1rem;
-      max-width: 600px;
-    }
-
-    .input-box input {
-      flex: 1;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .input-box button {
-      padding: 0.8rem 1rem;
-      background-color: #391D57;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-    }
-
     .iframe-container {
       display: flex;
       justify-content: center;
-      height: calc(100vh - 420px);
+      align-items: center;
+      height: calc(100vh - 170px);
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
     iframe {
@@ -100,6 +61,24 @@
       max-width: 600px;
       height: 100%;
       border: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    #chat-history {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.05);
+    }
+
+    .msg {
+      background: #eee;
+      padding: 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
     }
 
     footer {
@@ -121,11 +100,6 @@
 
   <div id="chat-history"></div>
 
-  <div class="input-box">
-    <input id="msgInput" type="text" placeholder="Digite sua mensagem..." />
-    <button id="sendBtn">Enviar</button>
-  </div>
-
   <div class="iframe-container">
     <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
   </div>
@@ -143,57 +117,35 @@
     import {
       getFirestore,
       collection,
-      addDoc,
       query,
       orderBy,
-      getDocs,
-      serverTimestamp,
-      doc,
-      setDoc,
-      getDoc
+      getDocs
     } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
     const db = getFirestore();
-    const historyDiv = document.getElementById("chat-history");
-    const msgInput = document.getElementById("msgInput");
-    const sendBtn = document.getElementById("sendBtn");
-
-    let currentUserId = localStorage.getItem("userId");
+    const chatHistory = document.getElementById("chat-history");
+    let userId = localStorage.getItem("userId");
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        currentUserId = user.uid;
-        localStorage.setItem("userId", currentUserId);
+        userId = user.uid;
+        localStorage.setItem("userId", userId);
         await carregarMensagens();
       } else {
         window.location.href = "/index.html";
       }
     });
 
-    sendBtn.addEventListener("click", async () => {
-      const texto = msgInput.value.trim();
-      if (texto === "" || !currentUserId) return;
-
-      await addDoc(collection(db, "usuarios", currentUserId, "mensagens"), {
-        texto,
-        timestamp: serverTimestamp()
-      });
-
-      msgInput.value = "";
-      await carregarMensagens();
-    });
-
     async function carregarMensagens() {
-      historyDiv.innerHTML = "";
-      const msgsRef = collection(db, "usuarios", currentUserId, "mensagens");
+      chatHistory.innerHTML = "";
+      const msgsRef = collection(db, "usuarios", userId, "mensagens");
       const q = query(msgsRef, orderBy("timestamp"));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
+      const snapshot = await getDocs(q);
+      snapshot.forEach((doc) => {
         const div = document.createElement("div");
         div.className = "msg";
-        div.textContent = data.texto;
-        historyDiv.appendChild(div);
+        div.textContent = doc.data().texto;
+        chatHistory.appendChild(div);
       });
     }
 
