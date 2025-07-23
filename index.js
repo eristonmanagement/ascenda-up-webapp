@@ -17,7 +17,7 @@ bot.on("text", async (ctx) => {
 
   try {
     const response = await fetch(
-      `https://api.docsbot.ai/api/v1/teams/${process.env.DOCSBOT_TEAM_ID}/chat/${process.env.DOCSBOT_BOT_ID}`,
+      `https://api.docsbot.ai/api/v1/chat/${process.env.DOCSBOT_BOT_ID}`,
       {
         method: "POST",
         headers: {
