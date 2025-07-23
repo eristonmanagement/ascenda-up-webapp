@@ -83,7 +83,7 @@
   </header>
 
   <div class="iframe-container">
-    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
+    <iframe id="docsbotFrame" src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
   </div>
 
   <footer>
@@ -92,12 +92,57 @@
 
   <script type="module">
     import { auth } from './firebase.js';
-    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+    const db = getFirestore();
+    const iframe = document.getElementById("docsbotFrame");
+
+    function enviarMensagemParaBot(mensagem) {
+      // Tenta acessar o iframe e simular o envio (limitação CORS pode impedir)
+      try {
+        iframe.contentWindow.postMessage({ type: "user-message", text: mensagem }, "*");
+      } catch (e) {
+        console.warn("Não foi possível enviar mensagem automática ao DocsBot:", e);
+      }
+    }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "/index.html";
+        return;
       }
+
+      const userId = user.uid;
+      const userRef = doc(db, "usuarios", userId);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const nome = data.nome || "Usuário";
+        const topico = data.topico || "o mesmo assunto anterior";
+        const mensagem = `${nome} está de volta à conversa por outro dispositivo ou navegador. Podem seguir falando sobre ${topico}.`;
+        enviarMensagemParaBot(mensagem);
+      } else {
+        const nomePrompt = prompt("Qual seu nome?");
+        const topicoPrompt = prompt("Sobre o que deseja conversar?");
+        await setDoc(userRef, {
+          nome: nomePrompt,
+          topico: topicoPrompt,
+          ultimaSessao: serverTimestamp()
+        });
+      }
+
+      localStorage.setItem("userId", user.uid);
     });
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
