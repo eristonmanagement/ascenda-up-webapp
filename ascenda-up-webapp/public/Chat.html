@@ -21,6 +21,7 @@
       font-weight: bold;
       font-size: 1.2rem;
       border-bottom: 1px solid #444;
+      position: relative;
     }
     main {
       flex: 1;
@@ -82,21 +83,11 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBkgWkJNrLj0ur-bliwxdDoQrikrdCfL7U",
-      authDomain: "ascendaup.firebaseapp.com",
-      projectId: "ascendaup",
-      storageBucket: "ascendaup.appspot.com",
-      messagingSenderId: "934093010271",
-      appId: "1:934093010271:web:59536a45f3ed67ce35f2ea",
-      measurementId: "G-NN8HW8JY8D"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    import { auth } from './firebase.js';
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const logoutButton = document.getElementById("logout");
     logoutButton.addEventListener("click", () => {
@@ -124,7 +115,6 @@
       chat.appendChild(div);
       input.value = "";
 
-      // Aqui você pode integrar com IA ou backend
       setTimeout(() => {
         const resposta = document.createElement("div");
         resposta.className = "message";

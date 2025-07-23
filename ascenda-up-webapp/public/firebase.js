@@ -1,18 +1,18 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// firebase.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDGE8J19XDGF7kvx6LZohh1vZgTNJqpLCA",
-  authDomain: "ascendaup-app.firebaseapp.com",
-  projectId: "ascendaup-app",
-  storageBucket: "ascendaup-app.appspot.com", // corrigido aqui
-  messagingSenderId: "278146844694",
-  appId: "1:278146844694:web:95395cb36eef08d11a8d37",
-  measurementId: "G-24YVW5SCFH"
+  apiKey: "AIzaSyBkgWkJNrLj0ur-bliwxdDoQrikrdCfL7U",
+  authDomain: "ascendaup.firebaseapp.com",
+  projectId: "ascendaup",
+  storageBucket: "ascendaup.appspot.com",
+  messagingSenderId: "934093010271",
+  appId: "1:934093010271:web:59536a45f3ed67ce35f2ea",
+  measurementId: "G-NN8HW8JY8D"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
+
+export { app, auth };
