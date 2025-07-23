@@ -1,41 +1,148 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ascenda Up — Chat</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ascenda Up</title>
+  <link rel="icon" type="image/png" href="icon.png"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      overflow-x: hidden;
+    }
+
+    header {
+      background-color: #391D57;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .left {
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid #fff;
+      padding: 0.4rem 0.8rem;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .iframe-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 120px);
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 100%;
+      border: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #666;
+      padding: 0.5rem;
+      word-wrap: break-word;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
-  <div class="chat-container">
-    <h1>Bem-vindo ao Ascenda Up</h1>
-    <p id="userEmail"></p>
-    <button id="logoutBtn">Sair</button>
-    <!-- Aqui entraria o chat real com iframe ou integração futura -->
+  <header>
+    <div class="left">
+      <img src="icon.png" alt="Ascenda Logo" />
+      <h1>Ascenda Up</h1>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
+  </header>
+
+  <div class="iframe-container">
+    <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
   </div>
 
-  <!-- Script do Firebase como módulo -->
+  <footer>
+    Produzido por Eriston Consult & Management
+  </footer>
+
   <script type="module">
     import { auth } from './firebase.js';
-    import { signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
-    const userEmail = document.getElementById('userEmail');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const db = getFirestore();
+    const localUserId = localStorage.getItem("userId");
 
-    // Verifica se o usuário está logado
-    onAuthStateChanged(auth, (user) => {
+    function exibirResumo(userId) {
+      const userRef = doc(db, "usuarios", userId);
+      getDoc(userRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          alert("Última sessão: " + (data.topico || "sem tópico") + " em " + (data.ultimaSessao?.toDate?.().toLocaleDateString() || "data não registrada"));
+        }
+        setDoc(userRef, {
+          ultimaSessao: serverTimestamp(),
+          topico: "Sessão aberta no chat",
+        }, { merge: true });
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        userEmail.textContent = "Usuário logado: " + user.email;
+        localStorage.setItem("userId", user.uid);
+        exibirResumo(user.uid);
+      } else if (localUserId) {
+        exibirResumo(localUserId);
       } else {
-        alert("Sessão expirada. Faça login novamente.");
-        window.location.href = "index.html";
+        window.location.href = "/index.html";
       }
     });
 
-    logoutBtn.addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        localStorage.clear();
+        window.location.href = "/index.html";
+      }).catch((error) => {
+        alert("Erro ao sair: " + error.message);
+      });
     });
   </script>
 </body>
