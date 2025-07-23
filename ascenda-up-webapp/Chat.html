@@ -1,4 +1,3 @@
-<!-- Atualizado manualmente para forçar commit -->
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,10 +9,8 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: sans-serif;
       background-color: #f7f7f7;
-      overflow-x: hidden;
     }
 
     header {
@@ -50,13 +47,52 @@
       font-size: 0.85rem;
     }
 
+    #chat-history {
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.05);
+      min-height: 100px;
+    }
+
+    .msg {
+      margin-bottom: 0.5rem;
+      background: #eee;
+      padding: 0.6rem;
+      border-radius: 6px;
+    }
+
+    .input-box {
+      display: flex;
+      justify-content: center;
+      margin: 1rem;
+      max-width: 600px;
+    }
+
+    .input-box input {
+      flex: 1;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .input-box button {
+      padding: 0.8rem 1rem;
+      background-color: #391D57;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+
     .iframe-container {
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: calc(100vh - 120px);
-      padding: 1rem;
-      box-sizing: border-box;
+      height: calc(100vh - 420px);
     }
 
     iframe {
@@ -64,7 +100,6 @@
       max-width: 600px;
       height: 100%;
       border: none;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
     }
 
     footer {
@@ -72,9 +107,6 @@
       font-size: 0.7rem;
       color: #666;
       padding: 0.5rem;
-      word-wrap: break-word;
-      max-width: 100%;
-      box-sizing: border-box;
     }
   </style>
 </head>
@@ -86,6 +118,13 @@
     </div>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </header>
+
+  <div id="chat-history"></div>
+
+  <div class="input-box">
+    <input id="msgInput" type="text" placeholder="Digite sua mensagem..." />
+    <button id="sendBtn">Enviar</button>
+  </div>
 
   <div class="iframe-container">
     <iframe src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR" allowtransparency="true" scrolling="no"></iframe>
@@ -103,46 +142,65 @@
     } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
     import {
       getFirestore,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      getDocs,
+      serverTimestamp,
       doc,
-      getDoc,
       setDoc,
-      serverTimestamp
+      getDoc
     } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
     const db = getFirestore();
-    const localUserId = localStorage.getItem("userId");
+    const historyDiv = document.getElementById("chat-history");
+    const msgInput = document.getElementById("msgInput");
+    const sendBtn = document.getElementById("sendBtn");
 
-    function exibirResumo(userId) {
-      const userRef = doc(db, "usuarios", userId);
-      getDoc(userRef).then((docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          alert("Última sessão: " + (data.topico || "sem tópico") + " em " + (data.ultimaSessao?.toDate?.().toLocaleDateString() || "data não registrada"));
-        }
-        setDoc(userRef, {
-          ultimaSessao: serverTimestamp(),
-          topico: "Sessão aberta no chat",
-        }, { merge: true });
-      });
-    }
+    let currentUserId = localStorage.getItem("userId");
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        localStorage.setItem("userId", user.uid);
-        exibirResumo(user.uid);
-      } else if (localUserId) {
-        exibirResumo(localUserId);
+        currentUserId = user.uid;
+        localStorage.setItem("userId", currentUserId);
+        await carregarMensagens();
       } else {
         window.location.href = "/index.html";
       }
     });
 
+    sendBtn.addEventListener("click", async () => {
+      const texto = msgInput.value.trim();
+      if (texto === "" || !currentUserId) return;
+
+      await addDoc(collection(db, "usuarios", currentUserId, "mensagens"), {
+        texto,
+        timestamp: serverTimestamp()
+      });
+
+      msgInput.value = "";
+      await carregarMensagens();
+    });
+
+    async function carregarMensagens() {
+      historyDiv.innerHTML = "";
+      const msgsRef = collection(db, "usuarios", currentUserId, "mensagens");
+      const q = query(msgsRef, orderBy("timestamp"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "msg";
+        div.textContent = data.texto;
+        historyDiv.appendChild(div);
+      });
+    }
+
     document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth).then(() => {
         localStorage.clear();
         window.location.href = "/index.html";
-      }).catch((error) => {
-        alert("Erro ao sair: " + error.message);
       });
     });
   </script>
