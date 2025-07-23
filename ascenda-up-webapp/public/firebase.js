@@ -1,21 +1,21 @@
-// public/firebase.js
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Importa apenas o necessário do SDK moderno (modular)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBkgWkJNrLjr0ur-bliwxdDoQrikrdCfL7U",
-  authDomain: "ascendaup.firebaseapp.com",
-  projectId: "ascendaup",
-  storageBucket: "ascendaup.appspot.com",
-  messagingSenderId: "934093010271",
-  appId: "1:934093010271:web:59536a45f3ed67ce35f2ea",
-  measurementId: "G-NN8HW8JY8D"
+  apiKey: "AIzaSyDGE8J19XDGF7kvx6LZohh1vZgTNJqpLCA",
+  authDomain: "ascendaup-app.firebaseapp.com",
+  projectId: "ascendaup-app",
+  storageBucket: "ascendaup-app.firebasestorage.app",
+  messagingSenderId: "278146844694",
+  appId: "1:278146844694:web:95395cb36eef08d11a8d37",
+  measurementId: "G-24YVW5SCFH"
 };
 
-// Inicializa o app
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Exporta o auth corretamente
-export const auth = getAuth(app);
+const analytics = getAnalytics(app);
