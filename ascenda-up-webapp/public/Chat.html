@@ -86,10 +86,72 @@
   </header>
 
   <div class="iframe-container">
-  <iframe
-    src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
-    allowtransparency="true"
-    scrolling="no">
-  </iframe>
-</div>
+    <iframe
+      src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
+      allowtransparency="true"
+      scrolling="no">
+    </iframe>
+  </div>
 
+  <footer>
+    Produzido por Eriston Consult & Management
+  </footer>
+
+  <script type="module">
+    import { auth } from './firebase.js';
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const db = getFirestore();
+    const localUserId = localStorage.getItem("userId");
+
+    function exibirResumo(userId) {
+      const userRef = doc(db, "usuarios", userId);
+      getDoc(userRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          alert("Última sessão: " + (data.topico || "sem tópico") + " em " + (data.ultimaSessao?.toDate?.().toLocaleDateString() || "data não registrada"));
+        }
+        setDoc(userRef, {
+          ultimaSessao: serverTimestamp(),
+          topico: "Sessão aberta no chat",
+        }, { merge: true });
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        localStorage.setItem("userId", user.uid);
+        exibirResumo(user.uid);
+      } else if (localUserId) {
+        exibirResumo(localUserId);
+      } else {
+        window.location.href = "/index.html";
+      }
+    });
+
+    const logoutButton = document.getElementById("logoutBtn");
+    if (logoutButton) {
+      logoutButton.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          window.location.href = "/index.html";
+        } catch (error) {
+          alert("Erro ao sair: " + error.message);
+          console.error("Erro no logout:", error);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
