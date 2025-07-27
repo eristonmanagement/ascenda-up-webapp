@@ -38,14 +38,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .link-senha {
-      margin-top: 20px;
-      display: inline-block;
-      color: white;
-      font-size: 14px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -70,8 +62,6 @@
     <input type="text" id="cidade" placeholder="Cidade" required />
     <button type="submit">Salvar dados</button>
   </form>
-
-  <a class="link-senha" href="https://ascendaup-app.firebaseapp.com/__/auth/action?mode=resetPassword">Criar ou redefinir senha</a>
 
   <script>
     const form = document.getElementById("profile-form");
@@ -107,7 +97,13 @@
           body: JSON.stringify(data)
         });
 
-        alert("Cadastro concluído! Você será redirecionado.");
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/api/enviar-link-redefinicao", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        alert("Cadastro completo! Você recebeu um e-mail para criar sua senha.");
         window.location.href = "/login.html";
       } catch (err) {
         alert("Erro ao salvar seus dados.");
