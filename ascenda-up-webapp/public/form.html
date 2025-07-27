@@ -91,13 +91,13 @@
       };
 
       try {
-        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/api/complementar-usuario", {
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/complementarUsuario", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
 
-        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/api/enviar-link-redefinicao", {
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/enviarLinkRedefinicao", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email })
