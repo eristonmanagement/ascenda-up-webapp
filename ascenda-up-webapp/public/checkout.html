@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up — Checkout</title>
+  <title>Ascenda Up — Comece agora</title>
   <style>
     body {
       margin: 0;
@@ -13,24 +13,19 @@
       padding: 1rem 0.5rem;
     }
     .container {
-      display: flex;
-      flex-wrap: wrap;
       max-width: 1080px;
       margin: 0 auto;
       background-color: #2a0050;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      padding: 1rem;
     }
-    .content {
-      flex: 1;
-      padding: 1rem 1rem 0.5rem;
-    }
-    .content h1 {
+    h1 {
       text-align: center;
       color: #E6E6FA;
-      font-size: 1.6rem;
-      margin-bottom: 1.2rem;
+      font-size: 1.8rem;
+      margin-bottom: 1.4rem;
     }
     .table-wrapper {
       width: 100%;
@@ -41,19 +36,20 @@
       min-width: 640px;
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       color: #f1f1f1;
     }
     .comparison-table th,
     .comparison-table td {
       border-bottom: 1px solid #ffffff22;
-      padding: 0.6rem 0.4rem;
+      padding: 0.8rem 0.5rem;
       text-align: center;
     }
     .comparison-table th {
       background-color: #320b86;
       color: #E6E6FA;
       font-weight: bold;
+      font-size: 1rem;
     }
     .comparison-table td:first-child {
       text-align: left;
@@ -62,19 +58,24 @@
     }
     .check {
       color: #24e35c;
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
     .cross {
-      color: #ff6b6b;
-      font-size: 1rem;
+      color: #ffcc00;
+      font-size: 1.1rem;
+    }
+    .highlight {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #ffffff;
     }
     .cta {
       background-color: #E6E6FA;
       color: #320b86;
-      padding: 0.4rem 0.7rem;
+      padding: 0.6rem 1rem;
       border: none;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
@@ -82,107 +83,76 @@
       margin-top: 0.3rem;
     }
     .cta:hover {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
-
-    .mascot {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-    }
-    .mascot img {
-      width: 160px;
-      height: auto;
-      border-radius: 8px;
-    }
-
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      .mascot {
-        order: 2;
-        padding: 1rem 1rem 1.5rem;
-      }
-      .mascot img {
-        width: 130px;
-      }
-      .content {
-        padding: 1rem 1rem 0;
-      }
-      .content h1 {
-        font-size: 1.4rem;
+      h1 {
+        font-size: 1.5rem;
         margin-bottom: 1rem;
       }
       .cta {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="content">
-      <h1>Escolha seu plano e comece agora</h1>
-      <div class="table-wrapper">
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Recursos</th>
-              <th>Mensal<br><span style="font-weight: normal;">R$ 9,90</span></th>
-              <th>Trimestral<br><span style="font-weight: normal;">R$ 24,90</span></th>
-              <th>Semestral<br><span style="font-weight: normal;">R$ 49,90</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Acesso ao Gui 24h/dia</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-            </tr>
-            <tr>
-              <td>Mensagens ilimitadas</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-            </tr>
-            <tr>
-              <td>Chat para praticar seu inglês (Reading/Writing)</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-              <td class="check">✔</td>
-            </tr>
-            <tr>
-              <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) — Disponível em breve</td>
-              <td class="cross">🚧</td>
-              <td class="check">🚧</td>
-              <td class="check">🚧</td>
-            </tr>
-            <tr>
-              <td>Desconto total</td>
-              <td>0%</td>
-              <td>16%</td>
-              <td>30%</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><a class="cta" href="https://buy.stripe.com/bJecN46bQ3et1eD7u88g001">Assinar Mensal</a></td>
-              <td><a class="cta" href="https://buy.stripe.com/4gM3cu57McP34qPcOs8g002">Assinar Trimestral</a></td>
-              <td><a class="cta" href="https://buy.stripe.com/eVqaEW0Rw3ete1pdSw8g003">Assinar Semestral</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="text-align:center; font-size: 0.85rem; color: #ccc; margin-top: 1rem;">
-        🔒 Pagamento seguro via Stripe
-      </p>
+    <h1>Invista no seu crescimento agora</h1>
+    <div class="table-wrapper">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>O que você recebe</th>
+            <th>Mensal<br><span class="highlight">R$ 9,90</span></th>
+            <th>Trimestral<br><span class="highlight">R$ 24,90</span></th>
+            <th>Semestral<br><span class="highlight">R$ 49,90</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Acesso ao Guia 24h/dia</strong></td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+          </tr>
+          <tr>
+            <td><strong>Mensagens ilimitadas</strong></td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+          </tr>
+          <tr>
+            <td><strong>Chat de inglês (Reading/Writing)</strong></td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+            <td class="check">✔</td>
+          </tr>
+          <tr>
+            <td><strong>Comunidade no WhatsApp</strong><br><small>(Vagas & Networking — disponível em breve)</small></td>
+            <td class="cross">🚧</td>
+            <td class="cross">🚧</td>
+            <td class="cross">🚧</td>
+          </tr>
+          <tr>
+            <td><strong>Desconto total</strong></td>
+            <td class="highlight">0%</td>
+            <td class="highlight">16%</td>
+            <td class="highlight" style="color: #00ffcc;">30%</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><a class="cta" href="https://buy.stripe.com/bJecN46bQ3et1eD7u88g001">Começar Mensal</a></td>
+            <td><a class="cta" href="https://buy.stripe.com/4gM3cu57McP34qPcOs8g002">Começar Trimestral</a></td>
+            <td><a class="cta" href="https://buy.stripe.com/eVqaEW0Rw3ete1pdSw8g003">Começar Semestral</a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="mascot">
-      <img src="mascote.png" alt="Mascote Gui Ascenda Up"/>
-    </div>
+    <p style="text-align:center; font-size: 0.9rem; color: #ccc; margin-top: 1.5rem;">
+      🔒 Pagamento 100% seguro via Stripe • Cancele quando quiser
+    </p>
   </div>
 </body>
 </html>
