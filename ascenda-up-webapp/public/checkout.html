@@ -92,16 +92,37 @@
     .cta:hover {
       transform: scale(1.05);
     }
+
+    /* RESPONSIVO */
     @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
       .container {
         flex-direction: column;
       }
-      .comparison-table td, .comparison-table th {
+      .mascot {
+        padding: 1rem;
+      }
+      .content {
+        padding: 1.5rem 1rem;
+      }
+      .content h1 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+      }
+      .comparison-table th,
+      .comparison-table td {
         font-size: 0.85rem;
-        padding: 0.6rem;
+        padding: 0.6rem 0.4rem;
       }
       .cta {
         font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+        margin-top: 0.5rem;
+      }
+      .comparison-table td br {
+        display: none;
       }
     }
   </style>
@@ -136,13 +157,13 @@
             <td class="check">✔</td>
           </tr>
           <tr>
-            <td>Chat para praticar seu inglês</td>
+            <td>Chat para praticar seu inglês (Reading/Writing)</td>
             <td class="check">✔</td>
             <td class="check">✔</td>
             <td class="check">✔</td>
           </tr>
           <tr>
-            <td>Acesso a Comunidade no WhatsApp(Vagas/Networking) Disponível em breve</td>
+            <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) - Disponível em breve</td>
             <td class="cross">🚧</td>
             <td class="check">🚧</td>
             <td class="check">🚧</td>
@@ -155,20 +176,14 @@
           </tr>
           <tr>
             <td></td>
-            <td>
-              <a class="cta" href="https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=79e7bc80ac7a4f9195aa57c4b6a35b7d">Assinar Mensal</a>
-            </td>
-            <td>
-              <a class="cta" href="https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=1f2946eb3e6e4a5096b4f4195cf7ea91">Assinar Trimestral</a>
-            </td>
-            <td>
-              <a class="cta" href="https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=a1d21c9d9f0744b297d879a5284cf3ed">Assinar Semestral</a>
-            </td>
+            <td><a class="cta" href="https://buy.stripe.com/bJecN46bQ3et1eD7u88g001">Assinar Mensal</a></td>
+            <td><a class="cta" href="https://buy.stripe.com/4gM3cu57McP34qPcOs8g002">Assinar Trimestral</a></td>
+            <td><a class="cta" href="https://buy.stripe.com/eVqaEW0Rw3ete1pdSw8g003">Assinar Semestral</a></td>
           </tr>
         </tbody>
       </table>
       <p style="text-align:center; font-size: 0.95rem; color: #ccc; margin-top: 2rem;">
-        🔒 Pagamento seguro via Mercado Pago
+        🔒 Pagamento seguro via Stripe
       </p>
     </div>
   </div>
