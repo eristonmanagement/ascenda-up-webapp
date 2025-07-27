@@ -10,7 +10,7 @@
       font-family: 'Inter', sans-serif;
       background-color: #1c0033;
       color: #ffffff;
-      padding: 2rem 1rem;
+      padding: 1rem 0.5rem;
     }
     .container {
       display: flex;
@@ -24,38 +24,37 @@
     }
     .mascot {
       flex: 1;
-      min-width: 280px;
-      background-color: #3a0073;
+      min-width: 240px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 1rem;
     }
     .mascot img {
-      max-width: 100%;
+      width: 160px;
       height: auto;
       border-radius: 8px;
     }
     .content {
       flex: 2;
-      padding: 2rem;
+      padding: 1rem;
     }
     .content h1 {
       text-align: center;
       color: #E6E6FA;
-      font-size: 2rem;
-      margin-bottom: 2rem;
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
     }
     .comparison-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #f1f1f1;
     }
     .comparison-table th,
     .comparison-table td {
       border-bottom: 1px solid #ffffff22;
-      padding: 0.8rem 1rem;
+      padding: 0.6rem 0.4rem;
       text-align: center;
     }
     .comparison-table th {
@@ -70,19 +69,19 @@
     }
     .check {
       color: #24e35c;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
     .cross {
       color: #ff6b6b;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
     .cta {
       background-color: #E6E6FA;
       color: #320b86;
-      padding: 0.6rem 1rem;
+      padding: 0.4rem 0.7rem;
       border: none;
       border-radius: 999px;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
@@ -95,31 +94,19 @@
 
     /* RESPONSIVO */
     @media (max-width: 768px) {
-      body {
-        padding: 1rem 0.5rem;
-      }
       .container {
         flex-direction: column;
       }
-      .mascot {
-        padding: 1rem;
-      }
-      .content {
-        padding: 1.5rem 1rem;
+      .mascot img {
+        width: 130px;
       }
       .content h1 {
-        font-size: 1.6rem;
-        margin-bottom: 1.5rem;
-      }
-      .comparison-table th,
-      .comparison-table td {
-        font-size: 0.85rem;
-        padding: 0.6rem 0.4rem;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
       }
       .cta {
-        font-size: 0.85rem;
-        padding: 0.5rem 0.8rem;
-        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
       }
       .comparison-table td br {
         display: none;
@@ -163,7 +150,7 @@
             <td class="check">✔</td>
           </tr>
           <tr>
-            <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) - Disponível em breve</td>
+            <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) — Disponível em breve</td>
             <td class="cross">🚧</td>
             <td class="check">🚧</td>
             <td class="check">🚧</td>
@@ -182,7 +169,7 @@
           </tr>
         </tbody>
       </table>
-      <p style="text-align:center; font-size: 0.95rem; color: #ccc; margin-top: 2rem;">
+      <p style="text-align:center; font-size: 0.85rem; color: #ccc; margin-top: 1rem;">
         🔒 Pagamento seguro via Stripe
       </p>
     </div>
