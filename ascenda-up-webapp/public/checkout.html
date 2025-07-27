@@ -22,22 +22,9 @@
       overflow: hidden;
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
     }
-    .mascot {
-      flex: 1;
-      min-width: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .mascot img {
-      width: 160px;
-      height: auto;
-      border-radius: 8px;
-    }
     .content {
-      flex: 2;
-      padding: 1rem;
+      flex: 1;
+      padding: 1rem 1rem 0.5rem;
     }
     .content h1 {
       text-align: center;
@@ -45,7 +32,13 @@
       font-size: 1.6rem;
       margin-bottom: 1.2rem;
     }
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     .comparison-table {
+      min-width: 640px;
       width: 100%;
       border-collapse: collapse;
       font-size: 0.88rem;
@@ -92,13 +85,32 @@
       transform: scale(1.05);
     }
 
-    /* RESPONSIVO */
+    .mascot {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .mascot img {
+      width: 160px;
+      height: auto;
+      border-radius: 8px;
+    }
+
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
       }
+      .mascot {
+        order: 2;
+        padding: 1rem 1rem 1.5rem;
+      }
       .mascot img {
         width: 130px;
+      }
+      .content {
+        padding: 1rem 1rem 0;
       }
       .content h1 {
         font-size: 1.4rem;
@@ -106,72 +118,70 @@
       }
       .cta {
         font-size: 0.8rem;
-        padding: 0.4rem 0.7rem;
-      }
-      .comparison-table td br {
-        display: none;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="mascot">
-      <img src="mascote.png" alt="Mascote Gui Ascenda Up"/>
-    </div>
     <div class="content">
       <h1>Escolha seu plano e comece agora</h1>
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>Recursos</th>
-            <th>Mensal<br><span style="font-weight: normal;">R$ 9,90</span></th>
-            <th>Trimestral<br><span style="font-weight: normal;">R$ 24,90</span></th>
-            <th>Semestral<br><span style="font-weight: normal;">R$ 49,90</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Acesso ao Gui 24h/dia</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-          </tr>
-          <tr>
-            <td>Mensagens ilimitadas</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-          </tr>
-          <tr>
-            <td>Chat para praticar seu inglês (Reading/Writing)</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-            <td class="check">✔</td>
-          </tr>
-          <tr>
-            <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) — Disponível em breve</td>
-            <td class="cross">🚧</td>
-            <td class="check">🚧</td>
-            <td class="check">🚧</td>
-          </tr>
-          <tr>
-            <td>Desconto total</td>
-            <td>0%</td>
-            <td>16%</td>
-            <td>30%</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><a class="cta" href="https://buy.stripe.com/bJecN46bQ3et1eD7u88g001">Assinar Mensal</a></td>
-            <td><a class="cta" href="https://buy.stripe.com/4gM3cu57McP34qPcOs8g002">Assinar Trimestral</a></td>
-            <td><a class="cta" href="https://buy.stripe.com/eVqaEW0Rw3ete1pdSw8g003">Assinar Semestral</a></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Recursos</th>
+              <th>Mensal<br><span style="font-weight: normal;">R$ 9,90</span></th>
+              <th>Trimestral<br><span style="font-weight: normal;">R$ 24,90</span></th>
+              <th>Semestral<br><span style="font-weight: normal;">R$ 49,90</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Acesso ao Gui 24h/dia</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+            </tr>
+            <tr>
+              <td>Mensagens ilimitadas</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+            </tr>
+            <tr>
+              <td>Chat para praticar seu inglês (Reading/Writing)</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+              <td class="check">✔</td>
+            </tr>
+            <tr>
+              <td>Acesso a Comunidade no WhatsApp (Vagas/Networking) — Disponível em breve</td>
+              <td class="cross">🚧</td>
+              <td class="check">🚧</td>
+              <td class="check">🚧</td>
+            </tr>
+            <tr>
+              <td>Desconto total</td>
+              <td>0%</td>
+              <td>16%</td>
+              <td>30%</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><a class="cta" href="https://buy.stripe.com/bJecN46bQ3et1eD7u88g001">Assinar Mensal</a></td>
+              <td><a class="cta" href="https://buy.stripe.com/4gM3cu57McP34qPcOs8g002">Assinar Trimestral</a></td>
+              <td><a class="cta" href="https://buy.stripe.com/eVqaEW0Rw3ete1pdSw8g003">Assinar Semestral</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <p style="text-align:center; font-size: 0.85rem; color: #ccc; margin-top: 1rem;">
         🔒 Pagamento seguro via Stripe
       </p>
+    </div>
+    <div class="mascot">
+      <img src="mascote.png" alt="Mascote Gui Ascenda Up"/>
     </div>
   </div>
 </body>
