@@ -4,6 +4,53 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Complete seu cadastro</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "ascendaup-app.firebaseapp.com",
+      projectId: "ascendaup-app",
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.enviarCadastro = async function () {
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value;
+      const confirmarSenha = document.getElementById("confirmarSenha").value;
+      const nome = document.getElementById("nome").value;
+      const nascimento = document.getElementById("nascimento").value;
+      const telefone = document.getElementById("telefone").value;
+      const estado = document.getElementById("estado").value;
+      const cidade = document.getElementById("cidade").value;
+
+      const senhaSegura = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+      if (!senhaSegura.test(senha)) {
+        alert("A senha deve ter no mínimo 8 caracteres, incluindo letra maiúscula, minúscula, número e símbolo.");
+        return;
+      }
+      if (senha !== confirmarSenha) {
+        alert("As senhas não conferem.");
+        return;
+      }
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, senha);
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/complementarUsuario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, nome, nascimento, telefone, estado, cidade })
+        });
+        alert("Cadastro concluído com sucesso!");
+        window.location.href = "/login.html";
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao concluir o cadastro.");
+      }
+    };
+  </script>
   <style>
     body {
       background-color: #1e0033;
@@ -12,14 +59,9 @@
       padding: 20px;
       text-align: center;
     }
-    img {
-      width: 120px;
-      margin-bottom: 20px;
-    }
-    form {
-      max-width: 400px;
-      margin: 0 auto;
-    }
+    img { width: 120px; margin-bottom: 20px; }
+    form { max-width: 400px; margin: 0 auto; text-align: left; }
+    h3 { color: #ccc; }
     input, select, button {
       width: 100%;
       padding: 12px;
@@ -28,10 +70,7 @@
       border: none;
       font-size: 14px;
     }
-    input, select {
-      background-color: #f0f0f0;
-      color: #000;
-    }
+    input, select { background-color: #f0f0f0; color: #000; }
     button {
       background-color: white;
       color: #1e0033;
@@ -43,8 +82,8 @@
 <body>
   <img src="icon.png" alt="Logo Ascenda" />
   <h2>Complete seu cadastro</h2>
-  <form id="profile-form">
-    <input type="email" id="email" placeholder="Confirme seu e-mail" required />
+  <form onsubmit="event.preventDefault(); enviarCadastro();">
+    <h3>Dados pessoais</h3>
     <input type="text" id="nome" placeholder="Nome completo" required />
     <input type="date" id="nascimento" required />
     <input type="tel" id="telefone" placeholder="Telefone com DDD" required />
@@ -61,58 +100,13 @@
       <option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
     </select>
     <input type="text" id="cidade" placeholder="Cidade" required />
-    <button type="submit">Salvar dados</button>
+
+    <h3>Acesso à plataforma</h3>
+    <input type="email" id="email" placeholder="Confirme seu e-mail" required />
+    <input type="password" id="senha" placeholder="Crie uma senha segura" required />
+    <input type="password" id="confirmarSenha" placeholder="Confirme a senha" required />
+
+    <button type="submit">Concluir cadastro</button>
   </form>
-
-  <script>
-    const form = document.getElementById("profile-form");
-    const params = new URLSearchParams(window.location.search);
-    const emailFromUrl = params.get("email");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const emailInput = document.getElementById("email").value.trim();
-      const nome = document.getElementById("nome").value;
-      const nascimento = document.getElementById("nascimento").value;
-      const telefone = document.getElementById("telefone").value;
-      const estado = document.getElementById("estado").value;
-      const cidade = document.getElementById("cidade").value;
-
-      if (!emailInput || emailInput !== emailFromUrl) {
-        alert("O e-mail informado não confere com o e-mail do link.");
-        return;
-      }
-
-      const data = {
-        email: emailInput,
-        nome,
-        nascimento,
-        telefone,
-        estado,
-        cidade
-      };
-
-      try {
-        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/complementarUsuario", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/enviarLinkRedefinicao", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: emailInput })
-        });
-
-        alert("Cadastro completo! Você recebeu um e-mail para criar sua senha.");
-        window.location.href = "/login.html";
-      } catch (err) {
-        alert("Erro ao salvar seus dados.");
-        console.error(err);
-      }
-    });
-  </script>
 </body>
 </html>
