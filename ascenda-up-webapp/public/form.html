@@ -44,6 +44,7 @@
   <img src="icon.png" alt="Logo Ascenda" />
   <h2>Complete seu cadastro</h2>
   <form id="profile-form">
+    <input type="email" id="email" placeholder="Confirme seu e-mail" required />
     <input type="text" id="nome" placeholder="Nome completo" required />
     <input type="date" id="nascimento" required />
     <input type="tel" id="telefone" placeholder="Telefone com DDD" required />
@@ -66,23 +67,25 @@
   <script>
     const form = document.getElementById("profile-form");
     const params = new URLSearchParams(window.location.search);
-    const email = params.get("email");
-
-    if (!email) {
-      alert("E-mail ausente no link. Acesse a partir do e-mail de boas-vindas.");
-    }
+    const emailFromUrl = params.get("email");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const emailInput = document.getElementById("email").value.trim();
       const nome = document.getElementById("nome").value;
       const nascimento = document.getElementById("nascimento").value;
       const telefone = document.getElementById("telefone").value;
       const estado = document.getElementById("estado").value;
       const cidade = document.getElementById("cidade").value;
 
+      if (!emailInput || emailInput !== emailFromUrl) {
+        alert("O e-mail informado não confere com o e-mail do link.");
+        return;
+      }
+
       const data = {
-        email,
+        email: emailInput,
         nome,
         nascimento,
         telefone,
@@ -100,7 +103,7 @@
         await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/enviarLinkRedefinicao", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email: emailInput })
         });
 
         alert("Cadastro completo! Você recebeu um e-mail para criar sua senha.");
@@ -112,7 +115,4 @@
     });
   </script>
 </body>
-
-echo "<!-- modificado $(date) -->" >> form.html
-
 </html>
