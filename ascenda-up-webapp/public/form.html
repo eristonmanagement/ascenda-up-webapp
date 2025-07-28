@@ -1,104 +1,103 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro | Ascenda Up</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #230033;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      text-align: left;
-    }
-    .box {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #2f0044;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 4px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      border: none;
-    }
-    button {
-      background-color: #8e44ad;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #732d91;
-    }
-    .msg {
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cadastro | Ascenda Up</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to bottom, #1c0033, #2a0050);
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: left;
+}
+.box {
+  background: linear-gradient(145deg, #320b86, #1c0033);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: #E6E6FA;
+}
+label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+}
+button {
+  background-color: #E6E6FA;
+  color: #1c0033;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #d3d3f5;
+}
+.msg {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
 </head>
 <body>
-  <img src="icon.png" alt="Ascenda Up" style="width: 120px; margin-bottom: 20px;">
-  <h1>Complete seu cadastro</h1>
-  <div class="container">
-    <form id="cadastroForm">
-      <div class="box">
-        <h3>Dados pessoais</h3>
-        <label for="nome">Nome completo</label>
-        <input type="text" id="nome" required />
-        <label for="nascimento">Data de nascimento</label>
-        <input type="date" id="nascimento" required />
-        <label for="telefone">Telefone</label>
-        <input type="tel" id="telefone" required />
-        <label for="estado">Estado</label>
-        <select id="estado" required>
-          <option value="">Selecione</option>
-          <option value="PE">Pernambuco</option>
-          <option value="SP">São Paulo</option>
-          <option value="RJ">Rio de Janeiro</option>
-          <option value="MG">Minas Gerais</option>
-        </select>
-        <label for="cidade">Cidade</label>
-        <input type="text" id="cidade" required />
-      </div>
-
-      <div class="box">
-        <h3>Acesso à plataforma</h3>
-        <label for="email">Confirme seu e-mail</label>
-        <input type="email" id="email" required />
-        <label for="senha">Criar nova senha</label>
-        <input type="password" id="senha" minlength="8" required />
-        <label for="confirmarSenha">Confirmar nova senha</label>
-        <input type="password" id="confirmarSenha" required />
-      </div>
-
-      <button type="submit">Concluir cadastro</button>
-    </form>
-
-    <div class="msg" id="mensagem"></div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script>
+<img alt="Ascenda Up" src="icon.png" style="width: 120px; margin-bottom: 20px;"/>
+<h1>Complete seu cadastro</h1>
+<div class="container">
+<form id="cadastroForm">
+<div class="box">
+<h3>Dados pessoais</h3>
+<label for="nome">Nome completo</label>
+<input id="nome" required="" type="text"/>
+<label for="nascimento">Data de nascimento</label>
+<input id="nascimento" required="" type="date"/>
+<label for="telefone">Telefone</label>
+<input id="telefone" required="" type="tel"/>
+<label for="estado">Estado</label>
+<select id="estado" required=""><option value="">Selecione</option><option value="Acre">Acre</option><option value="Alagoas">Alagoas</option><option value="Amapá">Amapá</option><option value="Amazonas">Amazonas</option><option value="Bahia">Bahia</option><option value="Ceará">Ceará</option><option value="Distrito Federal">Distrito Federal</option><option value="Espírito Santo">Espírito Santo</option><option value="Goiás">Goiás</option><option value="Maranhão">Maranhão</option><option value="Mato Grosso">Mato Grosso</option><option value="Mato Grosso do Sul">Mato Grosso do Sul</option><option value="Minas Gerais">Minas Gerais</option><option value="Pará">Pará</option><option value="Paraíba">Paraíba</option><option value="Paraná">Paraná</option><option value="Pernambuco">Pernambuco</option><option value="Piauí">Piauí</option><option value="Rio de Janeiro">Rio de Janeiro</option><option value="Rio Grande do Norte">Rio Grande do Norte</option><option value="Rio Grande do Sul">Rio Grande do Sul</option><option value="Rondônia">Rondônia</option><option value="Roraima">Roraima</option><option value="Santa Catarina">Santa Catarina</option><option value="São Paulo">São Paulo</option><option value="Sergipe">Sergipe</option><option value="Tocantins">Tocantins</option></select>
+<label for="cidade">Cidade</label>
+<input id="cidade" required="" type="text"/>
+</div>
+<div class="box">
+<h3>Acesso à plataforma</h3>
+<label for="email">Confirme seu e-mail</label>
+<input id="email" required="" type="email"/>
+<label for="senha">Criar nova senha</label>
+<input id="senha" minlength="8" required="" type="password"/>
+<label for="confirmarSenha">Confirmar nova senha</label>
+<input id="confirmarSenha" required="" type="password"/>
+</div>
+<button type="submit">Concluir cadastro</button>
+</form>
+<div class="msg" id="mensagem"></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script>
   
 
 	
