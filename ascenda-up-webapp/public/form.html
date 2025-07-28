@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -65,13 +64,10 @@
         <h3>Dados pessoais</h3>
         <label for="nome">Nome completo</label>
         <input type="text" id="nome" required />
-
         <label for="nascimento">Data de nascimento</label>
         <input type="date" id="nascimento" required />
-
         <label for="telefone">Telefone</label>
         <input type="tel" id="telefone" required />
-
         <label for="estado">Estado</label>
         <select id="estado" required>
           <option value="">Selecione</option>
@@ -80,7 +76,6 @@
           <option value="RJ">Rio de Janeiro</option>
           <option value="MG">Minas Gerais</option>
         </select>
-
         <label for="cidade">Cidade</label>
         <input type="text" id="cidade" required />
       </div>
@@ -89,11 +84,9 @@
         <h3>Acesso à plataforma</h3>
         <label for="email">Confirme seu e-mail</label>
         <input type="email" id="email" required />
-
-        <label for="senha">Criar senha</label>
-        <input type="password" id="senha" minlength="8" required pattern="(?=.*[a-zA-Z])(?=.*\d).{8,}" title="A senha deve ter no mínimo 8 caracteres com pelo menos uma letra e um número."/>
-
-        <label for="confirmarSenha">Confirmar senha</label>
+        <label for="senha">Criar nova senha</label>
+        <input type="password" id="senha" minlength="8" required />
+        <label for="confirmarSenha">Confirmar nova senha</label>
         <input type="password" id="confirmarSenha" required />
       </div>
 
@@ -105,16 +98,20 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDGE8J19XDGF7kx6LZohh1vZgTNuqpLCA",
       authDomain: "ascendaup-app.firebaseapp.com",
-      projectId: "ascendaup-app",
+      projectId: "ascendaup-app"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailParam = urlParams.get("email");
+    if (emailParam) {
+      document.getElementById("email").value = emailParam;
+    }
 
     document.getElementById("cadastroForm").addEventListener("submit", async function(e) {
       e.preventDefault();
@@ -126,7 +123,6 @@
       const email = document.getElementById("email").value.trim();
       const senha = document.getElementById("senha").value;
       const confirmarSenha = document.getElementById("confirmarSenha").value;
-
       const msg = document.getElementById("mensagem");
       msg.textContent = "";
 
@@ -136,21 +132,21 @@
       }
 
       try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
-        await db.collection("usuarios").doc(email).set({
-          nome,
-          nascimento,
-          telefone,
-          estado,
-          cidade,
-          atualizado_em: new Date().toISOString()
+        const senhaTemporaria = "12345678temp";
+        await auth.signInWithEmailAndPassword(email, senhaTemporaria);
+        const user = auth.currentUser;
+        await user.updatePassword(senha);
+
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/complementarUsuario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome, nascimento, telefone, estado, cidade, email })
         });
-        msg.textContent = "Cadastro realizado com sucesso!";
-        setTimeout(() => {
-          window.location.href = "/login.html";
-        }, 2000);
+
+        msg.textContent = "Cadastro concluído com sucesso!";
+        setTimeout(() => window.location.href = "/login.html", 2000);
       } catch (error) {
-        console.error("Erro ao cadastrar:", error);
+        console.error("Erro:", error);
         msg.textContent = "Erro: " + error.message;
       }
     });
