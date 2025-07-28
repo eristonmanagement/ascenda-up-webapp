@@ -4,59 +4,85 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Cadastro | Ascenda Up</title>
+  
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #230033;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      text-align: left;
-    }
-    .box {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #2f0044;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 4px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      border: none;
-    }
-    button {
-      background-color: #8e44ad;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #732d91;
-    }
-    .msg {
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #230033;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 500px; /* aumenta a largura do bloco */
+    margin: 0 auto;
+    text-align: left;
+    width: 90%;
+  }
+
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .box {
+    background-color: #3c0066;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  input, select {
+    width: 95%;
+    padding: 12px;
+    margin-bottom: 2px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #E6E6FA;
+    color: #1c0033;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #dcd0ff;
+  }
+
+  .msg {
+    text-align: center;
+    margin-top: 10px;
+  }
+</style>
+
+  
 </head>
 <body>
-  <img alt="Ascenda Up" src="icon.png" style="width: 120px; margin-bottom: 20px;"/>
+
+  <header style="background-color: #320b86; padding: 1rem 2rem; display: flex; align-items: center;">
+  <img src="icon.png" alt="Ascenda Up" style="max-height: 32px; margin-right: 10px;">
+  <span style="font-size: 1.2rem; font-weight: bold; color: white;">Ascenda Up</span>
+  </header>
+
+
   <h1>Complete seu cadastro</h1>
   <div class="container">
     <form id="cadastroForm">
@@ -73,6 +99,7 @@
         <label for="cidade">Cidade</label>
         <input id="cidade" required type="text"/>
       </div>
+	  
       <div class="box">
         <h3>Acesso à plataforma</h3>
         <label for="email">Confirme seu e-mail</label>
