@@ -99,11 +99,20 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDGE8J19XDGF7kx6LZohh1vZgTNuqpLCA",
+  
+
+	
+	const firebaseConfig = {
+      apiKey: "AIzaSyDGE8J19XDGF7kvx6LZohh1vZgTNJqpLCA",
       authDomain: "ascendaup-app.firebaseapp.com",
-      projectId: "ascendaup-app"
+      projectId: "ascendaup-app",
+      storageBucket: "ascendaup-app.appspot.com",
+      messagingSenderId: "278146844694",
+      appId: "1:278146844694:web:95395cb36eef08d11a8d37"
     };
+
+	
+	
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
