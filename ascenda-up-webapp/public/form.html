@@ -108,10 +108,70 @@ button:hover {
 <div id="sucessoCard" style="display: none; background-color: #2a0050; border: 2px solid #5f27cd; color: #fff; padding: 1.2rem; border-radius: 12px; max-width: 440px; margin: 1.5rem auto; text-align: center;">
 <strong>Cadastro concluído com sucesso!</strong><br/>Redirecionando para o login...
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script>
+  
+
+	
+	const firebaseConfig = {
+      apiKey: "AIzaSyDGE8J19XDGF7kvx6LZohh1vZgTNJqpLCA",
+      authDomain: "ascendaup-app.firebaseapp.com",
+      projectId: "ascendaup-app",
+      storageBucket: "ascendaup-app.appspot.com",
+      messagingSenderId: "278146844694",
+      appId: "1:278146844694:web:95395cb36eef08d11a8d37"
+    };
+
+	
+	
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailParam = urlParams.get("email");
+    if (emailParam) {
+      document.getElementById("email").value = emailParam;
+    }
+
+    document.getElementById("cadastroForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const nome = document.getElementById("nome").value.trim();
+      const nascimento = document.getElementById("nascimento").value;
+      const telefone = document.getElementById("telefone").value.trim();
+      const estado = document.getElementById("estado").value;
+      const cidade = document.getElementById("cidade").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value;
+      const confirmarSenha = document.getElementById("confirmarSenha").value;
+      const msg = document.getElementById("mensagem");
+      msg.textContent = "";
+
+      if (senha !== confirmarSenha) {
+        msg.textContent = "As senhas não coincidem.";
+        return;
+      }
+
+      try {
+        const senhaTemporaria = "12345678temp";
+        await auth.signInWithEmailAndPassword(email, senhaTemporaria);
+        const user = auth.currentUser;
+        await user.updatePassword(senha);
+
+        await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/complementarUsuario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome, nascimento, telefone, estado, cidade, email })
+        });
+
+        msg.textContent = "Cadastro concluído com sucesso!";
+        setTimeout(() => window.location.href = "/login.html", 2000);
+      } catch (error) {
+        console.error("Erro:", error);
+        msg.textContent = "Erro: " + error.message;
+      }
+    });
+  </script><script>
 document.getElementById("cadastroForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   const nome = document.getElementById("nome").value.trim();
