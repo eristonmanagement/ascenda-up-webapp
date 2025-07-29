@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -100,10 +101,10 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const db = getFirestore();
-    const localUserId = localStorage.getItem("userId");
+    const localUserEmail = localStorage.getItem("userId");
 
-    function exibirResumo(userId) {
-      const userRef = doc(db, "usuarios", userId);
+    function exibirResumo(email) {
+      const userRef = doc(db, "usuarios", email);
       getDoc(userRef).then((docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
@@ -120,10 +121,10 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        localStorage.setItem("userId", user.uid);
-        exibirResumo(user.uid);
-      } else if (localUserId) {
-        exibirResumo(localUserId);
+        localStorage.setItem("userId", user.email);
+        exibirResumo(user.email);
+      } else if (localUserEmail) {
+        exibirResumo(localUserEmail);
       } else {
         window.location.href = "/index.html";
       }
