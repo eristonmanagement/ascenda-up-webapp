@@ -112,7 +112,14 @@
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          atualizarNome(data.nome || email);
+		  
+		  
+         if (data && data.nome) {
+             atualizarNome(data.nome);
+        } else {
+             atualizarNome(email);
+        }
+		  
           await setDoc(userRef, {
             ultimaSessao: serverTimestamp(),
             topico: "Sessão aberta no chat"
