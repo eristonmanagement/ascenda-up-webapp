@@ -81,21 +81,15 @@
     <a id="resetLink">Esqueci minha senha</a>
   </form>
 
-  <script type="module">
-  import { auth } from './firebase.js';
+ 
+ 
+ <script type="module">
+  import { auth, db, doc, getDoc } from './firebase.js';
   import {
     signInWithEmailAndPassword,
     sendPasswordResetEmail,
     signOut
-  } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
-
-  import {
-    getFirestore,
-    doc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
-
-  const db = getFirestore();
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -144,6 +138,7 @@
     }
   });
 </script>
+
 
 </body>
 </html>
