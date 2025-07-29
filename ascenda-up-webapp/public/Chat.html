@@ -30,18 +30,16 @@
     .left {
       display: flex;
       align-items: center;
+      gap: 10px;
     }
 
     .left img {
       height: 30px;
-      margin-right: 10px;
     }
 
-    #userName {
-      font-size: 0.8rem;
-      font-weight: normal;
-      opacity: 0.85;
-      margin-left: 8px;
+    .left span {
+      font-size: 0.85rem;
+      opacity: 0.9;
     }
 
     .logout-btn {
@@ -71,11 +69,9 @@
   <header>
     <div class="left">
       <img src="icon.png" alt="Logo Ascenda" />
-    </div>
-    <div style="display: flex; align-items: center; gap: 10px;">
       <span id="userName"></span>
-      <button class="logout-btn" id="logoutBtn">Sair</button>
     </div>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
   </header>
 
   <div class="iframe-container">
