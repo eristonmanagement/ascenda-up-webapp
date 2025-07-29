@@ -12,6 +12,9 @@
       font-family: sans-serif;
       background-color: #f7f7f7;
       overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -38,6 +41,12 @@
       margin: 0;
     }
 
+    #userName {
+      font-size: 0.9rem;
+      margin-left: 1rem;
+      opacity: 0.8;
+    }
+
     .logout-btn {
       background: none;
       border: 1px solid #fff;
@@ -49,30 +58,15 @@
     }
 
     .iframe-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 120px);
-      padding: 1rem;
+      flex: 1;
+      padding: 0;
       box-sizing: border-box;
     }
 
     iframe {
       width: 100%;
-      max-width: 600px;
       height: 100%;
       border: none;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.7rem;
-      color: #666;
-      padding: 0.5rem;
-      word-wrap: break-word;
-      max-width: 100%;
-      box-sizing: border-box;
     }
   </style>
 </head>
@@ -81,6 +75,7 @@
     <div class="left">
       <img src="icon.png" alt="Ascenda Logo" />
       <h1>Ascenda Up</h1>
+      <span id="userName"></span>
     </div>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </header>
@@ -92,10 +87,6 @@
       scrolling="no">
     </iframe>
   </div>
-
-  <footer>
-    Produzido por Eriston Consult & Management
-  </footer>
 
   <script type="module">
     import { auth } from './firebase.js';
@@ -119,12 +110,14 @@
       getDoc(userRef).then((docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
-          alert("Última sessão: " + (data.topico || "sem tópico") + " em " + (data.ultimaSessao?.toDate?.().toLocaleDateString() || "data não registrada"));
+          if (data.nome) {
+            document.getElementById("userName").textContent = `Olá, ${data.nome}`;
+          }
+          setDoc(userRef, {
+            ultimaSessao: serverTimestamp(),
+            topico: "Sessão aberta no chat",
+          }, { merge: true });
         }
-        setDoc(userRef, {
-          ultimaSessao: serverTimestamp(),
-          topico: "Sessão aberta no chat",
-        }, { merge: true });
       });
     }
 
