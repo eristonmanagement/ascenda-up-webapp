@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ascenda Up</title>
+  <title>Chat - Ascenda Up</title>
   <link rel="icon" type="image/png" href="icon.png"/>
   <style>
     body {
@@ -26,25 +26,21 @@
       justify-content: space-between;
     }
 
-    header .left {
+    .left {
       display: flex;
       align-items: center;
     }
 
-    header img {
+    .left img {
       height: 30px;
       margin-right: 10px;
     }
 
-    header h1 {
-      font-size: 1.2rem;
-      margin: 0;
-    }
-
     #userName {
-      font-size: 0.9rem;
-      margin-left: 1rem;
-      opacity: 0.8;
+      font-size: 0.8rem;
+      font-weight: normal;
+      opacity: 0.85;
+      margin-left: 8px;
     }
 
     .logout-btn {
@@ -73,11 +69,12 @@
 <body>
   <header>
     <div class="left">
-      <img src="icon.png" alt="Ascenda Logo" />
-      <h1>Ascenda Up</h1>
-      <span id="userName"></span>
+      <img src="icon.png" alt="Logo Ascenda" />
     </div>
-    <button class="logout-btn" id="logoutBtn">Sair</button>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span id="userName"></span>
+      <button class="logout-btn" id="logoutBtn">Sair</button>
+    </div>
   </header>
 
   <div class="iframe-container">
@@ -111,7 +108,7 @@
         if (docSnap.exists()) {
           const data = docSnap.data();
           if (data.nome) {
-            document.getElementById("userName").textContent = `Olá, ${data.nome}`;
+            document.getElementById("userName").textContent = `${data.nome}`;
           }
           setDoc(userRef, {
             ultimaSessao: serverTimestamp(),
