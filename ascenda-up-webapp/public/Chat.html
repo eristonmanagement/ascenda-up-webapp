@@ -87,67 +87,74 @@
   </div>
 
   <script type="module">
-    import { auth } from './firebase.js';
-    import {
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    document.addEventListener("DOMContentLoaded", () => {
+      import { auth } from './firebase.js';
+      import {
+        signOut,
+        onAuthStateChanged
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const db = getFirestore();
+      const db = getFirestore();
 
-    function exibirResumo(email) {
-      const userRef = doc(db, "usuarios", email);
-      getDoc(userRef).then((docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.nome) {
-            document.getElementById("userName").textContent = `${data.nome}`;
+      function atualizarNomeNoTopo(nomeOuEmail) {
+        const span = document.getElementById("userName");
+        if (span) {
+          span.textContent = nomeOuEmail;
+        }
+      }
+
+      function exibirResumo(email) {
+        const userRef = doc(db, "usuarios", email);
+        getDoc(userRef)
+          .then((docSnap) => {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              atualizarNomeNoTopo(data.nome || email);
+              setDoc(userRef, {
+                ultimaSessao: serverTimestamp(),
+                topico: "Sessão aberta no chat",
+              }, { merge: true });
+            } else {
+              atualizarNomeNoTopo(email);
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar dados do Firestore:", error);
+            atualizarNomeNoTopo(email);
+          });
+      }
+
+      onAuthStateChanged(auth, (user) => {
+        if (user && user.email) {
+          localStorage.setItem("userEmail", user.email);
+          exibirResumo(user.email);
+        } else {
+          const emailLocal = localStorage.getItem("userEmail");
+          if (emailLocal) {
+            exibirResumo(emailLocal);
           } else {
-            document.getElementById("userName").textContent = email;
+            window.location.href = "/index.html";
           }
-
-          setDoc(userRef, {
-            ultimaSessao: serverTimestamp(),
-            topico: "Sessão aberta no chat",
-          }, { merge: true });
-        } else {
-          document.getElementById("userName").textContent = email;
         }
-      }).catch((error) => {
-        console.error("Erro ao buscar dados do Firestore:", error);
       });
-    }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user && user.email) {
-        localStorage.setItem("userEmail", user.email);
-        exibirResumo(user.email);
-      } else {
-        const emailLocal = localStorage.getItem("userEmail");
-        if (emailLocal) {
-          exibirResumo(emailLocal);
-        } else {
+      document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          localStorage.clear();
           window.location.href = "/index.html";
+        } catch (error) {
+          alert("Erro ao sair: " + error.message);
+          console.error("Erro no logout:", error);
         }
-      }
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        localStorage.clear();
-        window.location.href = "/index.html";
-      } catch (error) {
-        alert("Erro ao sair: " + error.message);
-        console.error("Erro no logout:", error);
-      }
+      });
     });
   </script>
 </body>
