@@ -121,33 +121,20 @@
 	
 
 //---------------------------- Novo código Cancelar Plano -----------------------------------------------
-      const cancelButton = document.getElementById("cancelBtn");
-      if (cancelButton) {
-          cancelButton.addEventListener("click", () => {
-         const email = localStorage.getItem("userEmail");
-      if (!email) {
-          alert("E-mail do usuário não encontrado.");
-          return;
+     const cancelButton = document.getElementById("cancelBtn");
+        if (cancelButton) {
+            cancelButton.addEventListener("click", () => {
+            const email = localStorage.getItem("userEmail");
+        if (!email) {
+            alert("E-mail do usuário não encontrado.");
+        return;
         }
 
-    fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
-      .then(response => {
-        if (!response.ok) throw new Error("Erro ao abrir portal.");
-        return response.json();
-      })
-      .then(data => {
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert("Não foi possível abrir o portal de cancelamento.");
-        }
-      })
-      .catch(error => {
-        alert("Erro ao abrir portal: " + error.message);
-        console.error("Erro no cancelamento:", error);
-      });
-  });
-}
+            // Abre o portal diretamente como um redirecionamento
+            window.location.href = `https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`;
+        });
+	}
+
 //------------------------------------------------------------------------------------------------------------------
 
     async function exibirResumo(email) {
