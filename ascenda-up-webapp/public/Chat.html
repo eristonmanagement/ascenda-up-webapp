@@ -77,13 +77,7 @@
   </div>
 </header>
 
-<div class="iframe-container">
-  <iframe
-    src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
-    allowtransparency="true"
-    scrolling="no">
-  </iframe>
-</div>
+<div class="iframe-container" id="iframe-container"></div>
 
 <script type="module">
   import { auth } from './firebase.js';
@@ -138,11 +132,18 @@
     if (user && user.email) {
       localStorage.setItem("userEmail", user.email);
       exibirResumo(user.email);
+
+      // Injeção do iframe protegida
+      const container = document.getElementById("iframe-container");
+      const src = atob("aHR0cHM6Ly9kb2NzYm90LmFpL2lmcmFtZS9iVXg2MGdtNjV2NUZldExGWmx0Sy8wandNTUEyeUVtT3FjUkwzME8=");
+      const iframe = document.createElement("iframe");
+      iframe.setAttribute("src", src);
+      iframe.setAttribute("allowtransparency", "true");
+      iframe.setAttribute("scrolling", "no");
+      container.appendChild(iframe);
     } else {
       const emailLocal = localStorage.getItem("userEmail");
-      if (emailLocal) {
-        exibirResumo(emailLocal);
-      } else {
+      if (!emailLocal) {
         window.location.href = "/index.html";
       }
     }
@@ -162,7 +163,7 @@
     });
   }
 
-  // Função para abrir o portal de gerenciamento da assinatura Stripe
+  // Gerenciar assinatura
   window.abrirPortal = function () {
     const email = localStorage.getItem("userEmail");
 
