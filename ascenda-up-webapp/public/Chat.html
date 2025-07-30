@@ -81,7 +81,7 @@
     <span id="userName"></span>
   </div>
   <div style="display: flex; gap: 8px;">
-    <button class="logout-btn" id="cancelBtn">Meu plano</button>
+	<button onclick="abrirPortal()">Gerenciar assinatura</button>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </div>
 </header>
@@ -194,4 +194,33 @@
     }
   </script>
 </body>
+
+      <script>
+         function abrirPortal() {
+         const email = localStorage.getItem("userEmail");
+
+      if (!email) {
+         alert("E-mail do usuário não encontrado.");
+         return;
+       }
+
+      fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
+          .then(response => {
+          if (!response.ok) throw new Error("Erro ao abrir portal.");
+             return response.json();
+            })
+        .then(data => {
+          if (data.url) {
+             window.location.href = data.url;
+            } else {
+                 alert("Não foi possível abrir o portal de cancelamento.");
+            }
+        })
+            .catch(error => {
+            console.error("Erro no cancelamento:", error);
+            alert("Erro ao abrir portal: " + error.message);
+        });
+  }
+</script>
+
 </html>
