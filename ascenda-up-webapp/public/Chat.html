@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -65,15 +64,7 @@
     }
   </style>
 </head>
-<body> <!--
-  <header>
-    <div class="left">
-      <img src="icon.png" alt="Logo Ascenda" />
-      <span id="userName"></span>
-    </div>
-    <button class="logout-btn" id="logoutBtn">Sair</button>
-  </header>
--->
+<body>
 
 <header>
   <div class="left">
@@ -81,146 +72,123 @@
     <span id="userName"></span>
   </div>
   <div style="display: flex; gap: 8px;">
-	<button onclick="abrirPortal()">Gerenciar assinatura</button>
+    <button onclick="abrirPortal()">Gerenciar assinatura</button>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </div>
 </header>
 
+<div class="iframe-container">
+  <iframe
+    src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
+    allowtransparency="true"
+    scrolling="no">
+  </iframe>
+</div>
 
+<script type="module">
+  import { auth } from './firebase.js';
+  import {
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <div class="iframe-container">
-    <iframe
-      src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
-      allowtransparency="true"
-      scrolling="no">
-    </iframe>
-  </div>
+  const db = getFirestore();
 
-  <script type="module">
-    import { auth } from './firebase.js';
-    import {
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const db = getFirestore();
-
-    function atualizarNome(nomeOuEmail) {
-      const span = document.getElementById("userName");
-      if (span) {
-        span.textContent = nomeOuEmail;
-      }
+  function atualizarNome(nomeOuEmail) {
+    const span = document.getElementById("userName");
+    if (span) {
+      span.textContent = nomeOuEmail;
     }
-	
+  }
 
-//---------------------------- Novo código Cancelar Plano -----------------------------------------------
-     const cancelButton = document.getElementById("cancelBtn");
-        if (cancelButton) {
-            cancelButton.addEventListener("click", () => {
-            const email = localStorage.getItem("userEmail");
-        if (!email) {
-            alert("E-mail do usuário não encontrado.");
-        return;
-        }
+  async function exibirResumo(email) {
+    try {
+      const userRef = doc(db, "usuarios", email);
+      const docSnap = await getDoc(userRef);
 
-            // Abre o portal diretamente como um redirecionamento
-            window.location.href = `https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`;
-        });
-	}
-
-//------------------------------------------------------------------------------------------------------------------
-
-    async function exibirResumo(email) {
-      try {
-        const userRef = doc(db, "usuarios", email);
-        const docSnap = await getDoc(userRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-		  
-		  
-         if (data && data.nome) {
-             atualizarNome(data.nome);
-        } else {
-             atualizarNome(email);
-        }
-		  
-          await setDoc(userRef, {
-            ultimaSessao: serverTimestamp(),
-            topico: "Sessão aberta no chat"
-          }, { merge: true });
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data && data.nome) {
+          atualizarNome(data.nome);
         } else {
           atualizarNome(email);
         }
-      } catch (error) {
-        console.error("Erro ao buscar ou atualizar dados:", error);
+
+        await setDoc(userRef, {
+          ultimaSessao: serverTimestamp(),
+          topico: "Sessão aberta no chat"
+        }, { merge: true });
+      } else {
         atualizarNome(email);
       }
+    } catch (error) {
+      console.error("Erro ao buscar ou atualizar dados:", error);
+      atualizarNome(email);
     }
+  }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user && user.email) {
-        localStorage.setItem("userEmail", user.email);
-        exibirResumo(user.email);
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.email) {
+      localStorage.setItem("userEmail", user.email);
+      exibirResumo(user.email);
+    } else {
+      const emailLocal = localStorage.getItem("userEmail");
+      if (emailLocal) {
+        exibirResumo(emailLocal);
       } else {
-        const emailLocal = localStorage.getItem("userEmail");
-        if (emailLocal) {
-          exibirResumo(emailLocal);
-        } else {
-          window.location.href = "/index.html";
-        }
+        window.location.href = "/index.html";
+      }
+    }
+  });
+
+  const logoutButton = document.getElementById("logoutBtn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        localStorage.clear();
+        window.location.href = "/index.html";
+      } catch (error) {
+        alert("Erro ao sair: " + error.message);
+        console.error("Erro no logout:", error);
       }
     });
-
-    const logoutButton = document.getElementById("logoutBtn");
-    if (logoutButton) {
-      logoutButton.addEventListener("click", async () => {
-        try {
-          await signOut(auth);
-          localStorage.clear();
-          window.location.href = "/index.html";
-        } catch (error) {
-          alert("Erro ao sair: " + error.message);
-          console.error("Erro no logout:", error);
-        }
-      });
-    }
-  </script>
-</body>
-
-      <script>
-         function abrirPortal() {
-         const email = localStorage.getItem("userEmail");
-
-      if (!email) {
-         alert("E-mail do usuário não encontrado.");
-         return;
-       }
-
-      fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
-          .then(response => {
-          if (!response.ok) throw new Error("Erro ao abrir portal.");
-             return response.json();
-            })
-        .then(data => {
-          if (data.url) {
-             window.location.href = data.url;
-            } else {
-                 alert("Não foi possível abrir o portal de cancelamento.");
-            }
-        })
-            .catch(error => {
-            console.error("Erro no cancelamento:", error);
-            alert("Erro ao abrir portal: " + error.message);
-        });
   }
+
+  // Função para abrir o portal de gerenciamento da assinatura Stripe
+  window.abrirPortal = function () {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      alert("E-mail do usuário não encontrado.");
+      return;
+    }
+
+    fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
+      .then(response => {
+        if (!response.ok) throw new Error("Erro ao abrir portal.");
+        return response.json();
+      })
+      .then(data => {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Não foi possível abrir o portal de cancelamento.");
+        }
+      })
+      .catch(error => {
+        console.error("Erro no cancelamento:", error);
+        alert("Erro ao abrir portal: " + error.message);
+      });
+  };
 </script>
 
+</body>
 </html>
