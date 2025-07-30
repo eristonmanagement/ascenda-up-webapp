@@ -193,7 +193,8 @@ async function carregarDocsBot() {
     if (!data.token) throw new Error("Token não recebido.");
 
     const iframe = document.createElement("iframe");
-    iframe.src = `https://docsbot.ai/iframe/bUx60gm65v5FetLFZ1tK/0jwMMA2yEmOqcRL3H0aR?token=${data.token}`;
+  //  iframe.src = `https://docsbot.ai/iframe/bUx60gm65v5FetLFZ1tK/0jwMMA2yEmOqcRL3H0aR?token=${data.token}`;
+    iframe.src = `https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR?token=${data.token}`;
     iframe.allowTransparency = "true";
     iframe.scrolling = "no";
     iframe.style.border = "none";
