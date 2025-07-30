@@ -180,25 +180,33 @@
   };
 
   // Função para carregar iframe com token protegido
-  async function carregarDocsBot() {
-    try {
-      const res = await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/tokenDocsBot");
-      const data = await res.json();
-      if (!data.token) throw new Error("Token não recebido.");
+async function carregarDocsBot() {
+  try {
+    const res = await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/tokenDocsBot");
 
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://docsbot.ai/iframe/bUx60gm65v5FetLFZ1tK/0jwMMA2yEmOqcRL3H0aR?token=${data.token}`;
-      iframe.allowTransparency = "true";
-      iframe.scrolling = "no";
-      iframe.style.border = "none";
-      iframe.width = "100%";
-      iframe.height = "100%";
-
-      document.getElementById("iframe-container").appendChild(iframe);
-    } catch (err) {
-      console.error("Erro ao carregar DocsBot:", err);
+    if (!res.ok) {
+      const erroTexto = await res.text();
+      throw new Error(`Erro na função: ${res.status} - ${erroTexto}`);
     }
+
+    const data = await res.json();
+    if (!data.token) throw new Error("Token não recebido.");
+
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://docsbot.ai/iframe/bUx60gm65v5FetLFZ1tK/0jwMMA2yEmOqcRL3H0aR?token=${data.token}`;
+    iframe.allowTransparency = "true";
+    iframe.scrolling = "no";
+    iframe.style.border = "none";
+    iframe.width = "100%";
+    iframe.height = "100%";
+
+    document.getElementById("iframe-container").appendChild(iframe);
+  } catch (err) {
+    console.error("Erro ao carregar DocsBot:", err.message);
+    alert("Erro ao carregar chat. Detalhes no console.");
   }
+}
+
 </script>
 
 </body>
