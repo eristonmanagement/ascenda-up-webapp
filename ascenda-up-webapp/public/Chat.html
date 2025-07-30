@@ -3,46 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seu Guia Profissional</title>
+  <title>Chat - Ascenda Up</title>
+  <link rel="icon" type="image/png" href="icon.png"/>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #1a1a2e;
-      color: white;
       margin: 0;
       padding: 0;
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      overflow-x: hidden;
       height: 100vh;
       display: flex;
       flex-direction: column;
     }
+
     header {
-      background-color: #4b0076;
+      background-color: #391D57;
+      color: white;
+      padding: 1rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
+      justify-content: space-between;
     }
+
     .left {
       display: flex;
       align-items: center;
+      gap: 10px;
     }
-    #userName {
-      margin-left: 10px;
-      font-weight: bold;
+
+    .left img {
+      height: 30px;
     }
-    .logout-btn, .gerenciar-btn {
-      background-color: white;
-      color: #4b0076;
-      border: none;
-      padding: 6px 12px;
-      margin-left: 10px;
-      cursor: pointer;
+
+    .left span {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid #fff;
+      padding: 0.4rem 0.8rem;
+      color: white;
       border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
     }
+
     .iframe-container {
       flex: 1;
-      overflow: hidden;
+      padding: 0;
+      box-sizing: border-box;
     }
+
     iframe {
       width: 100%;
       height: 100%;
@@ -51,67 +65,135 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="left">
-      <img src="icon.png" alt="Logo Ascenda" height="28" />
-      <span id="userName">Usuário</span>
-    </div>
-    <div>
-      <button class="gerenciar-btn" onclick="abrirPortal()">Gerenciar assinatura</button>
-      <button class="logout-btn" id="logoutBtn">Sair</button>
-    </div>
-  </header>
 
-  <div class="iframe-container" id="iframeArea">
-    <!-- Iframe será inserido via JS -->
+<header>
+  <div class="left">
+    <img src="icon.png" alt="Logo Ascenda" />
+    <span id="userName"></span>
   </div>
+  <div style="display: flex; gap: 8px;">
+    <button onclick="abrirPortal()">Gerenciar assinatura</button>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
+  </div>
+</header>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const nome = localStorage.getItem("userName") || "Usuário";
-      const email = localStorage.getItem("userEmail");
+<div class="iframe-container">
+  <iframe id="iframeBot" allowtransparency="true" scrolling="no"></iframe>
+</div>
 
-      document.getElementById("userName").textContent = nome;
+<script>
+  // Inserindo o src por JavaScript para esconder de inspeção direta no HTML
+  const iframe = document.getElementById("iframeBot");
+  const base = "https://docsbot.ai/iframe/";
+  const key = "bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR";
+  iframe.src = base + key;
+</script>
 
-      // ✅ Insere o iframe via JavaScript de forma protegida
-      const iframeSrc = atob("aHR0cHM6Ly9kb2NzYm90LmFpL2lmcmFtZS9iVXg2MGdtNjV2NUZldExGWjF0Sy9PandNTUEyeUVtT3FjUkwzSE9hUg==");
-      const iframe = document.createElement("iframe");
-      iframe.src = iframeSrc;
-      iframe.allowTransparency = "true";
-      iframe.scrolling = "no";
-      document.getElementById("iframeArea").appendChild(iframe);
 
-      // ✅ Função de logout
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.clear();
-        window.location.href = "index.html";
-      });
+<script type="module">
+  import { auth } from './firebase.js';
+  import {
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      // ✅ Abre o portal Stripe
-      window.abrirPortal = () => {
-        if (!email) {
-          alert("E-mail do usuário não encontrado.");
-          return;
+  const db = getFirestore();
+
+  function atualizarNome(nomeOuEmail) {
+    const span = document.getElementById("userName");
+    if (span) {
+      span.textContent = nomeOuEmail;
+    }
+  }
+
+  async function exibirResumo(email) {
+    try {
+      const userRef = doc(db, "usuarios", email);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data && data.nome) {
+          atualizarNome(data.nome);
+        } else {
+          atualizarNome(email);
         }
 
-        fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
-          .then(res => {
-            if (!res.ok) throw new Error("Erro ao abrir portal.");
-            return res.json();
-          })
-          .then(data => {
-            if (data.url) {
-              window.location.href = data.url;
-            } else {
-              alert("Não foi possível abrir o portal de cancelamento.");
-            }
-          })
-          .catch(err => {
-            console.error("Erro no cancelamento:", err);
-            alert("Erro ao abrir portal.");
-          });
-      };
+        await setDoc(userRef, {
+          ultimaSessao: serverTimestamp(),
+          topico: "Sessão aberta no chat"
+        }, { merge: true });
+      } else {
+        atualizarNome(email);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar ou atualizar dados:", error);
+      atualizarNome(email);
+    }
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.email) {
+      localStorage.setItem("userEmail", user.email);
+      exibirResumo(user.email);
+    } else {
+      const emailLocal = localStorage.getItem("userEmail");
+      if (emailLocal) {
+        exibirResumo(emailLocal);
+      } else {
+        window.location.href = "/index.html";
+      }
+    }
+  });
+
+  const logoutButton = document.getElementById("logoutBtn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        localStorage.clear();
+        window.location.href = "/index.html";
+      } catch (error) {
+        alert("Erro ao sair: " + error.message);
+        console.error("Erro no logout:", error);
+      }
     });
-  </script>
+  }
+
+  // Função para abrir o portal de gerenciamento da assinatura Stripe
+  window.abrirPortal = function () {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      alert("E-mail do usuário não encontrado.");
+      return;
+    }
+
+    fetch(`https://us-central1-ascendaup-app.cloudfunctions.net/portalDeCancelamento?email=${encodeURIComponent(email)}`)
+      .then(response => {
+        if (!response.ok) throw new Error("Erro ao abrir portal.");
+        return response.json();
+      })
+      .then(data => {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Não foi possível abrir o portal de cancelamento.");
+        }
+      })
+      .catch(error => {
+        console.error("Erro no cancelamento:", error);
+        alert("Erro ao abrir portal: " + error.message);
+      });
+  };
+</script>
+
 </body>
 </html>
