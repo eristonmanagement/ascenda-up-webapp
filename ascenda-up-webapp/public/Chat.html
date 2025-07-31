@@ -72,7 +72,7 @@
     <span id="userName"></span>
   </div>
   <div style="display: flex; gap: 8px;">
-    <button onclick="abrirPortal()">Gerenciar conta</button>
+    <button id="botaoConta">Carregando...</button>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </div>
 </header>
@@ -134,14 +134,36 @@
     }
   }
 
+  async function verificarCustomerId(email) {
+    try {
+      const userRef = doc(db, "usuarios", email);
+      const docSnap = await getDoc(userRef);
+      const botao = document.getElementById("botaoConta");
+
+      if (docSnap.exists() && docSnap.data().customerId) {
+        botao.innerText = "Gerenciar Conta";
+        botao.onclick = abrirPortal;
+      } else {
+        botao.innerText = "Assine o Ascenda";
+        botao.onclick = () => {
+          window.location.href = "/checkout.html";
+        };
+      }
+    } catch (err) {
+      console.error("Erro ao verificar customerId:", err);
+    }
+  }
+
   onAuthStateChanged(auth, (user) => {
     if (user && user.email) {
       localStorage.setItem("userEmail", user.email);
       exibirResumo(user.email);
+      verificarCustomerId(user.email);
     } else {
       const emailLocal = localStorage.getItem("userEmail");
       if (emailLocal) {
         exibirResumo(emailLocal);
+        verificarCustomerId(emailLocal);
       } else {
         window.location.href = "/index.html";
       }
@@ -162,7 +184,6 @@
     });
   }
 
-  // Função para abrir o portal de gerenciamento da assinatura Stripe
   window.abrirPortal = function () {
     const email = localStorage.getItem("userEmail");
 
