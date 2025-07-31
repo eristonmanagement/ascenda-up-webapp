@@ -16,6 +16,7 @@
       display: flex;
       flex-direction: column;
     }
+
     header {
       background-color: #391D57;
       color: white;
@@ -24,18 +25,22 @@
       align-items: center;
       justify-content: space-between;
     }
+
     .left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .left img {
       height: 30px;
     }
+
     .left span {
       font-size: 0.85rem;
       opacity: 0.9;
     }
+
     .logout-btn {
       background: none;
       border: 1px solid #fff;
@@ -45,11 +50,13 @@
       cursor: pointer;
       font-size: 0.85rem;
     }
+
     .iframe-container {
       flex: 1;
       padding: 0;
       box-sizing: border-box;
     }
+
     iframe {
       width: 100%;
       height: 100%;
@@ -70,8 +77,12 @@
   </div>
 </header>
 
-<div class="iframe-container" id="iframe-container">
-  <!-- O iframe será inserido aqui dinamicamente -->
+<div class="iframe-container">
+  <iframe
+    src="https://docsbot.ai/iframe/bUx60gm65v5FetLFZltK/0jwMMA2yEmOqcRL3H0aR"
+    allowtransparency="true"
+    scrolling="no">
+  </iframe>
 </div>
 
 <script type="module">
@@ -127,12 +138,10 @@
     if (user && user.email) {
       localStorage.setItem("userEmail", user.email);
       exibirResumo(user.email);
-      carregarDocsBot();
     } else {
       const emailLocal = localStorage.getItem("userEmail");
       if (emailLocal) {
         exibirResumo(emailLocal);
-        carregarDocsBot();
       } else {
         window.location.href = "/index.html";
       }
@@ -156,6 +165,7 @@
   // Função para abrir o portal de gerenciamento da assinatura Stripe
   window.abrirPortal = function () {
     const email = localStorage.getItem("userEmail");
+
     if (!email) {
       alert("E-mail do usuário não encontrado.");
       return;
@@ -168,9 +178,9 @@
       })
       .then(data => {
         if (data.url) {
-          window.open(data.url, '_blank'); // Abre em nova aba
+          window.location.href = data.url;
         } else {
-          alert("Não foi possível abrir o portal.");
+          alert("Não foi possível abrir o portal de cancelamento.");
         }
       })
       .catch(error => {
@@ -178,35 +188,6 @@
         alert("Erro ao abrir portal: " + error.message);
       });
   };
-
-  // Função para carregar iframe com token protegido
-async function carregarDocsBot() {
-  try {
-    const res = await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/tokenDocsBot");
-
-    if (!res.ok) {
-      const erro = await res.text();
-      throw new Error(`Erro da função: ${res.status} - ${erro}`);
-    }
-
-    const data = await res.json();
-    if (!data.iframeUrl) throw new Error("URL do iframe não recebida.");
-
-    const iframe = document.createElement("iframe");
-    iframe.src = data.iframeUrl;
-    iframe.allowTransparency = "true";
-    iframe.scrolling = "no";
-    iframe.style.border = "none";
-    iframe.width = "100%";
-    iframe.height = "100%";
-
-    document.getElementById("iframe-container").appendChild(iframe);
-  } catch (err) {
-    console.error("Erro ao carregar DocsBot:", err.message);
-    alert("Erro ao carregar chat. Veja o console.");
-  }
-}
-
 </script>
 
 </body>
