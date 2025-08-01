@@ -154,6 +154,23 @@
     }
   }
 
+  async function verificarSessaoAtiva() {
+    const email = localStorage.getItem("userEmail");
+    if (!email) return;
+
+    const docRef = doc(db, "usuarios", email);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists() && docSnap.data().apto === false) {
+      alert("Seu acesso foi encerrado. Faça login novamente ou renove sua assinatura.");
+      await signOut(auth);
+      localStorage.clear();
+      window.location.href = "/login.html";
+    }
+  }
+
+  setInterval(verificarSessaoAtiva, 60000); // Verifica a cada 60 segundos
+
   onAuthStateChanged(auth, (user) => {
     if (user && user.email) {
       localStorage.setItem("userEmail", user.email);
