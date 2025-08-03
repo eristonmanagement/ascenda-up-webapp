@@ -7,194 +7,301 @@
   <link rel="icon" type="image/png" href="/icon.png">
   <script type="module" src="firebase.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #230033; color: white; padding: 20px; }
-    .container { max-width: 1100px; margin: auto; }
-    .header { font-size: 1.4rem; font-weight: bold; margin-bottom: 20px; }
-    .dashboard-layout { display: flex; gap: 30px; flex-wrap: wrap; }
-    .left-box { flex: 1; min-width: 320px; background-color: #3c0066; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    .right-box { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 12px; }
-    .card { background-color: #3c0066; border-radius: 12px; padding: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; }
-    .progress-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid #7e57c2; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; margin: auto; }
-    .box-tabela { margin-top: 30px; background-color: #3c0066; border-radius: 12px; padding: 20px; }
-    .btn-nova-acao { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 8px 16px; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; margin-bottom: 10px; }
-    table { width: 100%; border-collapse: collapse; background-color: #3c0066; border-radius: 8px; overflow: hidden; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #5e2d91; font-size: 0.95rem; }
-    th { background-color: #4a007f; font-weight: bold; }
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
-    .modal-content { background: #3c0066; padding: 20px; border-radius: 12px; width: 500px; max-width: 90%; }
-    .close { float: right; font-size: 20px; cursor: pointer; color: #ccc; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #230033;
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .topbar img {
+      height: 40px;
+    }
+    .dashboard-layout {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .left-box {
+      flex: 1;
+      min-width: 320px;
+      background-color: #3c0066;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .right-box {
+      flex: 1;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card {
+      background-color: #2d004b;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .progress-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 6px solid #7e57c2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: auto;
+    }
+    .box-tabela {
+      margin-top: 30px;
+      background-color: #3c0066;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .btn-nova-acao {
+      background-color: #E6E6FA;
+      color: #1c0033;
+      font-weight: bold;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #3c0066;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #5e2d91;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #4a007f;
+      font-weight: bold;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #3c0066;
+      padding: 20px;
+      border-radius: 12px;
+      width: 500px;
+      max-width: 90%;
+    }
+    .close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ccc;
+    }
   </style>
 </head>
 <body>
-<div class="container" id="app">
-  <p>Carregando...</p>
-</div>
-
-<div class="modal" id="modalAcao">
-  <div class="modal-content">
-    <span class="close" onclick="fecharModal()">&times;</span>
-    <h3>Nova Ação</h3>
-    <label>Descrição</label><textarea id="descAcao"></textarea>
-    <label>Data Início</label><input type="date" id="inicioAcao" />
-    <label>Data Término</label><input type="date" id="fimAcao" />
-    <label>Status</label>
-    <select id="statusAcao">
-      <option value="pendente">Pendente</option>
-      <option value="em andamento">Em andamento</option>
-      <option value="concluido">Concluído</option>
-    </select>
-    <label>Indicador de Sucesso</label><input type="text" id="indicadorAcao" />
-    <br><br><button onclick="salvarAcao()">Salvar Ação</button>
+  <div class="container">
+    <div class="topbar"><img src="/icon.png" alt="Ascenda Up"></div>
+    <div id="app"><p>Carregando...</p></div>
   </div>
-</div>
 
-<script type="module">
-  import { auth } from './firebase.js';
-  import {
-    getFirestore, doc, getDoc, collection, addDoc, getDocs
-  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  <div class="modal" id="modalAcao">
+    <div class="modal-content">
+      <span class="close" onclick="fecharModal()">&times;</span>
+      <h3>Nova Ação</h3>
+      <label>Descrição</label><textarea id="descAcao"></textarea>
+      <label>Data Início</label><input type="date" id="inicioAcao" />
+      <label>Data Término</label><input type="date" id="fimAcao" />
+      <label>Status</label>
+      <select id="statusAcao">
+        <option value="pendente">Pendente</option>
+        <option value="em andamento">Em andamento</option>
+        <option value="concluido">Concluído</option>
+      </select>
+      <label>Indicador de Sucesso</label><input type="text" id="indicadorAcao" />
+      <br><br><button onclick="salvarAcao()">Salvar Ação</button>
+    </div>
+  </div>
 
-  const db = getFirestore();
-  const appDiv = document.getElementById('app');
-  let email = null;
-  let nome = null;
+  <script type="module">
+    import { auth } from './firebase.js';
+    import {
+      getFirestore, doc, getDoc, collection, addDoc, getDocs
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = '/login.html';
-      return;
+    const db = getFirestore();
+    const appDiv = document.getElementById('app');
+    let email = null;
+    let nome = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = '/login.html';
+        return;
+      }
+      email = user.email;
+      const userRef = doc(db, "usuarios", email);
+      const userSnap = await getDoc(userRef);
+      nome = userSnap.exists() ? userSnap.data().nome : user.email;
+
+      const planoRef = doc(userRef, "planosDeAcao", "planoUnico");
+      const snap = await getDoc(planoRef);
+
+      if (snap.exists()) {
+        const plano = snap.data();
+        renderPainel(plano);
+        carregarAcoes();
+      } else {
+        renderFormulario();
+      }
+    });
+
+    function renderFormulario() {
+      appDiv.innerHTML = `
+        <h1>Crie seu Plano de Carreira</h1>
+        <form id="formPlano" class="left-box">
+          <label>Título</label><input id="titulo" required>
+          <label>Objetivo</label><textarea id="objetivo"></textarea>
+          <label>Início</label><input type="date" id="inicio">
+          <label>Conclusão</label><input type="date" id="fim">
+          <label>Área Foco</label>
+          <select id="area">
+            <option>Liderança</option><option>Comunicação</option><option>Gestão de Projetos</option><option>Soft Skills</option>
+          </select><br><br>
+          <button type="submit">Salvar Plano</button>
+        </form>
+      `;
+      document.getElementById('formPlano').addEventListener('submit', salvarPlano);
     }
-    email = user.email;
-    nome = user.displayName || user.email;
 
-    const planoRef = doc(db, "usuarios", email, "planosDeAcao", "planoUnico");
-    const snap = await getDoc(planoRef);
+    async function salvarPlano(e) {
+      e.preventDefault();
+      const plano = {
+        email,
+        titulo: document.getElementById('titulo').value,
+        objetivo: document.getElementById('objetivo').value,
+        inicio: document.getElementById('inicio').value,
+        fim: document.getElementById('fim').value,
+        areaFoco: document.getElementById('area').value
+      };
 
-    if (snap.exists()) {
-      const plano = snap.data();
+      await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/criarOuAtualizarPlano", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(plano)
+      });
+
       renderPainel(plano);
+    }
+
+    function renderPainel(plano) {
+      appDiv.innerHTML = `
+        <h1 style="margin-bottom: 12px; font-size: 2rem; font-weight: 700;">${nome}</h1>
+        <div class="dashboard-layout">
+          <div class="left-box">
+            <p><strong>Título:</strong> ${plano.titulo}</p>
+            <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
+            <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
+            <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
+          </div>
+          <div class="right-box" id="painelResumo">
+            <div class="card">
+              <div class="progress-circle" id="percentual">--%</div>
+              <p style="margin: 10px 0 0; font-size: 1rem; color: #bbb">Progresso</p>
+            </div>
+            <div class="card" id="resumoTotais">Ações: carregando...</div>
+          </div>
+        </div>
+        <div class="box-tabela">
+          <h3>Ações</h3>
+          <button class="btn-nova-acao" onclick="abrirModal()">+ Nova Ação</button>
+          <table style="margin-top: 10px;">
+            <thead>
+              <tr><th>Descrição</th><th>Início</th><th>Término</th><th>Status</th><th>Indicador</th></tr>
+            </thead>
+            <tbody id="listaAcoes"></tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.abrirModal = function () {
+      document.getElementById("descAcao").value = "";
+      document.getElementById("inicioAcao").value = "";
+      document.getElementById("fimAcao").value = "";
+      document.getElementById("statusAcao").value = "pendente";
+      document.getElementById("indicadorAcao").value = "";
+      document.getElementById("modalAcao").style.display = "flex";
+    }
+
+    window.fecharModal = function () {
+      document.getElementById("modalAcao").style.display = "none";
+    }
+
+    window.salvarAcao = async function () {
+      const acao = {
+        descricao: document.getElementById("descAcao").value,
+        inicio: document.getElementById("inicioAcao").value,
+        fim: document.getElementById("fimAcao").value,
+        status: document.getElementById("statusAcao").value,
+        indicador: document.getElementById("indicadorAcao").value
+      };
+
+      await addDoc(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"), acao);
+      fecharModal();
       carregarAcoes();
-    } else {
-      renderFormulario();
     }
-  });
 
-  function renderFormulario() {
-    appDiv.innerHTML = `
-      <h1>Crie seu Plano de Carreira</h1>
-      <form id="formPlano" class="left-box">
-        <label>Título</label><input id="titulo" required>
-        <label>Objetivo</label><textarea id="objetivo"></textarea>
-        <label>Início</label><input type="date" id="inicio">
-        <label>Conclusão</label><input type="date" id="fim">
-        <label>Área Foco</label>
-        <select id="area">
-          <option>Liderança</option><option>Comunicação</option><option>Gestão de Projetos</option><option>Soft Skills</option>
-        </select><br><br>
-        <button type="submit">Salvar Plano</button>
-      </form>
-    `;
-    document.getElementById('formPlano').addEventListener('submit', salvarPlano);
-  }
+    async function carregarAcoes() {
+      const tbody = document.getElementById("listaAcoes");
+      tbody.innerHTML = "";
+      const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
+      let total = 0, concluidos = 0;
 
-  async function salvarPlano(e) {
-    e.preventDefault();
-    const plano = {
-      email,
-      titulo: document.getElementById('titulo').value,
-      objetivo: document.getElementById('objetivo').value,
-      inicio: document.getElementById('inicio').value,
-      fim: document.getElementById('fim').value,
-      areaFoco: document.getElementById('area').value
-    };
+      snap.forEach(doc => {
+        const acao = doc.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
+        tbody.appendChild(tr);
 
-    await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/criarOuAtualizarPlano", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(plano)
-    });
+        total++;
+        if (acao.status === 'concluido') concluidos++;
+      });
 
-    renderPainel(plano);
-  }
-
-  function renderPainel(plano) {
-    appDiv.innerHTML = `
-      <div class="header">Olá, ${nome.split("@")[0]} 👋</div>
-      <div class="dashboard-layout">
-        <div class="left-box">
-          <p><strong>Título:</strong> ${plano.titulo}</p>
-          <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
-          <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
-          <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
-        </div>
-        <div class="right-box" id="painelResumo">
-          <div class="card"><div class="progress-circle" id="percentual">--%</div><p>Progresso</p></div>
-          <div class="card" id="resumoTotais">Ações: carregando...</div>
-        </div>
-      </div>
-      <div class="box-tabela">
-        <h3>Ações</h3>
-        <button class="btn-nova-acao" onclick="abrirModal()">+ Nova Ação</button>
-        <table style="margin-top: 10px;">
-          <thead>
-            <tr><th>Descrição</th><th>Início</th><th>Término</th><th>Status</th><th>Indicador</th></tr>
-          </thead>
-          <tbody id="listaAcoes"></tbody>
-        </table>
-      </div>
-    `;
-  }
-
-  window.abrirModal = function () {
-    document.getElementById("descAcao").value = "";
-    document.getElementById("inicioAcao").value = "";
-    document.getElementById("fimAcao").value = "";
-    document.getElementById("statusAcao").value = "pendente";
-    document.getElementById("indicadorAcao").value = "";
-    document.getElementById("modalAcao").style.display = "flex";
-  }
-
-  window.fecharModal = function () {
-    document.getElementById("modalAcao").style.display = "none";
-  }
-
-  window.salvarAcao = async function () {
-    const acao = {
-      descricao: document.getElementById("descAcao").value,
-      inicio: document.getElementById("inicioAcao").value,
-      fim: document.getElementById("fimAcao").value,
-      status: document.getElementById("statusAcao").value,
-      indicador: document.getElementById("indicadorAcao").value
-    };
-
-    await addDoc(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"), acao);
-    fecharModal();
-    carregarAcoes();
-  }
-
-  async function carregarAcoes() {
-    const tbody = document.getElementById("listaAcoes");
-    tbody.innerHTML = "";
-    const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
-    let total = 0, concluidos = 0;
-
-    snap.forEach(doc => {
-      const acao = doc.data();
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
-      tbody.appendChild(tr);
-
-      total++;
-      if (acao.status === 'concluido') concluidos++;
-    });
-
-    if (total > 0) {
-      const percentual = Math.round((concluidos / total) * 100);
-      document.getElementById("percentual").textContent = percentual + "%";
-      document.getElementById("resumoTotais").innerHTML = `${total} ações totais<br>${concluidos} concluídas<br>${total - concluidos} pendentes/em andamento`;
+      if (total > 0) {
+        const percentual = Math.round((concluidos / total) * 100);
+        document.getElementById("percentual").textContent = percentual + "%";
+        document.getElementById("resumoTotais").innerHTML = `<p style='margin: 0; font-size: 1.1rem'><strong>${total}</strong> ações totais</p><p style='margin: 2px 0'><strong>${concluidos}</strong> concluídas</p><p style='margin: 2px 0'><strong>${total - concluidos}</strong> pendentes/em andamento</p>`;
+      }
     }
-  }
-</script>
+  </script>
 </body>
 </html>
