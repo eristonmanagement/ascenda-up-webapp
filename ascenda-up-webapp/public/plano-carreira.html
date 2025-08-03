@@ -16,10 +16,6 @@
     .inline-inputs input { flex: 1; }
     button { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 12px; width: 100%; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
     button:hover { background-color: #dcd0ff; }
-    table { width: 100%; border-collapse: collapse; background-color: #3c0066; border-radius: 8px; overflow: hidden; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #5e2d91; }
-    th { background-color: #4a007f; font-weight: bold; }
-    tbody tr:hover { background-color: #53218c; }
   </style>
 </head>
 <body>
@@ -29,47 +25,34 @@
 
 <script type="module">
   import { auth } from './firebase.js';
+  import {
+    getFirestore, doc, getDoc
+  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
   import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-  let userId = null;
+  const db = getFirestore();
+  const appDiv = document.getElementById('app');
+  let email = null;
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = '/login.html';
       return;
     }
-    userId = user.uid;
-    carregarPlano();
-  });
+    email = user.email;
 
-  async function carregarPlano() {
-    const appDiv = document.getElementById('app');
-    try {
-      const res = await fetch(`https://firestore.googleapis.com/v1/projects/ascendaup-app/databases/(default)/documents/planosDeAcao/${userId}`);
-      if (!res.ok) throw new Error("Plano não encontrado");
-      const data = await res.json();
-      const plano = data.fields;
+    const planoRef = doc(db, "usuarios", email, "planosDeAcao", "planoUnico");
+    const snap = await getDoc(planoRef);
 
-      appDiv.innerHTML = `
-        <h1>Meu Plano de Carreira</h1>
-        <div class="box">
-          <p><strong>Título:</strong> ${plano.titulo.stringValue}</p>
-          <p><strong>Objetivo:</strong> ${plano.objetivo.stringValue}</p>
-          <p><strong>Período:</strong> ${plano.inicio.stringValue} até ${plano.fim.stringValue}</p>
-          <p><strong>Área Foco:</strong> ${plano.areaFoco.stringValue}</p>
-        </div>
-        <div class="box">
-          <h3>Ações</h3>
-          <p>Integração da lista de ações será feita via Firestore JS SDK</p>
-        </div>
-      `;
-    } catch (err) {
+    if (snap.exists()) {
+      const plano = snap.data();
+      renderPainel(plano);
+    } else {
       renderFormulario();
     }
-  }
+  });
 
   function renderFormulario() {
-    const appDiv = document.getElementById('app');
     appDiv.innerHTML = `
       <h1>Crie seu Plano de Carreira</h1>
       <form id="formPlano" class="box">
@@ -92,7 +75,7 @@
   async function salvarPlano(e) {
     e.preventDefault();
     const plano = {
-      uid: userId,
+      email,
       titulo: document.getElementById('titulo').value,
       objetivo: document.getElementById('objetivo').value,
       inicio: document.getElementById('inicio').value,
@@ -106,7 +89,19 @@
       body: JSON.stringify(plano)
     });
 
-    carregarPlano();
+    renderPainel(plano);
+  }
+
+  function renderPainel(plano) {
+    appDiv.innerHTML = `
+      <h1>Meu Plano de Carreira</h1>
+      <div class="box">
+        <p><strong>Título:</strong> ${plano.titulo}</p>
+        <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
+        <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
+        <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
+      </div>
+    `;
   }
 </script>
 </body>
