@@ -41,7 +41,7 @@
       opacity: 0.9;
     }
 
-    .logout-btn {
+    .logout-btn, .btn-secundario {
       background: none;
       border: 1px solid #fff;
       padding: 0.4rem 0.8rem;
@@ -72,6 +72,7 @@
     <span id="userName"></span>
   </div>
   <div style="display: flex; gap: 8px;">
+    <button class="btn-secundario" onclick="window.location.href='/plano-carreira.html'">Plano de Carreira</button>
     <button id="botaoConta">Carregando...</button>
     <button class="logout-btn" id="logoutBtn">Sair</button>
   </div>
@@ -169,7 +170,7 @@
     }
   }
 
-  setInterval(verificarSessaoAtiva, 60000); // Verifica a cada 60 segundos
+  setInterval(verificarSessaoAtiva, 60000);
 
   onAuthStateChanged(auth, (user) => {
     if (user && user.email) {
@@ -216,7 +217,7 @@
       })
       .then(data => {
         if (data.url) {
-          window.location.href = data.url;
+          window.open(data.url, "_blank");
         } else {
           alert("Não foi possível abrir o portal de cancelamento.");
         }
