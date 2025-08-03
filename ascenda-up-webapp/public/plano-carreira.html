@@ -9,20 +9,20 @@
   <style>
     body { font-family: Arial, sans-serif; background-color: #230033; color: white; padding: 20px; }
     .container { max-width: 1100px; margin: auto; }
-    .box { background-color: #3c0066; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    label { display: block; margin-top: 12px; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 1rem; }
-    .inline-inputs { display: flex; gap: 10px; }
-    .inline-inputs input { flex: 1; }
-    button { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
-    button:hover { background-color: #dcd0ff; }
+    .header { font-size: 1.4rem; font-weight: bold; margin-bottom: 20px; }
+    .dashboard-layout { display: flex; gap: 30px; flex-wrap: wrap; }
+    .left-box { flex: 1; min-width: 320px; background-color: #3c0066; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .right-box { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 12px; }
+    .card { background-color: #3c0066; border-radius: 12px; padding: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; }
+    .progress-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid #7e57c2; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; margin: auto; }
+    .box-tabela { margin-top: 30px; background-color: #3c0066; border-radius: 12px; padding: 20px; }
+    .btn-nova-acao { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 8px 16px; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; margin-bottom: 10px; }
     table { width: 100%; border-collapse: collapse; background-color: #3c0066; border-radius: 8px; overflow: hidden; }
     th, td { padding: 10px; text-align: left; border-bottom: 1px solid #5e2d91; font-size: 0.95rem; }
     th { background-color: #4a007f; font-weight: bold; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
     .modal-content { background: #3c0066; padding: 20px; border-radius: 12px; width: 500px; max-width: 90%; }
     .close { float: right; font-size: 20px; cursor: pointer; color: #ccc; }
-    .btn-nova-acao { width: auto; margin-bottom: 10px; padding: 8px 16px; font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -58,6 +58,7 @@
   const db = getFirestore();
   const appDiv = document.getElementById('app');
   let email = null;
+  let nome = null;
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -65,6 +66,7 @@
       return;
     }
     email = user.email;
+    nome = user.displayName || user.email;
 
     const planoRef = doc(db, "usuarios", email, "planosDeAcao", "planoUnico");
     const snap = await getDoc(planoRef);
@@ -81,13 +83,11 @@
   function renderFormulario() {
     appDiv.innerHTML = `
       <h1>Crie seu Plano de Carreira</h1>
-      <form id="formPlano" class="box">
+      <form id="formPlano" class="left-box">
         <label>Título</label><input id="titulo" required>
         <label>Objetivo</label><textarea id="objetivo"></textarea>
-        <div class="inline-inputs">
-          <div><label>Início</label><input type="date" id="inicio" /></div>
-          <div><label>Conclusão</label><input type="date" id="fim" /></div>
-        </div>
+        <label>Início</label><input type="date" id="inicio">
+        <label>Conclusão</label><input type="date" id="fim">
         <label>Área Foco</label>
         <select id="area">
           <option>Liderança</option><option>Comunicação</option><option>Gestão de Projetos</option><option>Soft Skills</option>
@@ -120,14 +120,20 @@
 
   function renderPainel(plano) {
     appDiv.innerHTML = `
-      <h1>Meu Plano de Carreira</h1>
-      <div class="box">
-        <p><strong>Título:</strong> ${plano.titulo}</p>
-        <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
-        <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
-        <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
+      <div class="header">Olá, ${nome.split("@")[0]} 👋</div>
+      <div class="dashboard-layout">
+        <div class="left-box">
+          <p><strong>Título:</strong> ${plano.titulo}</p>
+          <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
+          <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
+          <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
+        </div>
+        <div class="right-box" id="painelResumo">
+          <div class="card"><div class="progress-circle" id="percentual">--%</div><p>Progresso</p></div>
+          <div class="card" id="resumoTotais">Ações: carregando...</div>
+        </div>
       </div>
-      <div class="box">
+      <div class="box-tabela">
         <h3>Ações</h3>
         <button class="btn-nova-acao" onclick="abrirModal()">+ Nova Ação</button>
         <table style="margin-top: 10px;">
@@ -171,12 +177,23 @@
     const tbody = document.getElementById("listaAcoes");
     tbody.innerHTML = "";
     const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
+    let total = 0, concluidos = 0;
+
     snap.forEach(doc => {
       const acao = doc.data();
       const tr = document.createElement("tr");
       tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
       tbody.appendChild(tr);
+
+      total++;
+      if (acao.status === 'concluido') concluidos++;
     });
+
+    if (total > 0) {
+      const percentual = Math.round((concluidos / total) * 100);
+      document.getElementById("percentual").textContent = percentual + "%";
+      document.getElementById("resumoTotais").innerHTML = `${total} ações totais<br>${concluidos} concluídas<br>${total - concluidos} pendentes/em andamento`;
+    }
   }
 </script>
 </body>
