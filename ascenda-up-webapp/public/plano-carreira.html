@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Carreira - Ascenda Up</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <script type="module" src="firebase.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #230033; color: white; padding: 20px; }
+    .container { max-width: 1000px; margin: auto; }
+    .box { background-color: #3c0066; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    label { display: block; margin-top: 12px; margin-bottom: 4px; }
+    input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 1rem; }
+    .inline-inputs { display: flex; gap: 10px; }
+    .inline-inputs input { flex: 1; }
+    button { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 12px; width: 100%; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+    button:hover { background-color: #dcd0ff; }
+    table { width: 100%; border-collapse: collapse; background-color: #3c0066; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #5e2d91; }
+    th { background-color: #4a007f; font-weight: bold; }
+    tbody tr:hover { background-color: #53218c; }
+  </style>
+</head>
+<body>
+<div class="container" id="app">
+  <p>Carregando...</p>
+</div>
+
+<script type="module">
+  import { auth } from './firebase.js';
+  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  let userId = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = '/login.html';
+      return;
+    }
+    userId = user.uid;
+    carregarPlano();
+  });
+
+  async function carregarPlano() {
+    const appDiv = document.getElementById('app');
+    try {
+      const res = await fetch(`https://firestore.googleapis.com/v1/projects/ascendaup-app/databases/(default)/documents/planosDeAcao/${userId}`);
+      if (!res.ok) throw new Error("Plano não encontrado");
+      const data = await res.json();
+      const plano = data.fields;
+
+      appDiv.innerHTML = `
+        <h1>Meu Plano de Carreira</h1>
+        <div class="box">
+          <p><strong>Título:</strong> ${plano.titulo.stringValue}</p>
+          <p><strong>Objetivo:</strong> ${plano.objetivo.stringValue}</p>
+          <p><strong>Período:</strong> ${plano.inicio.stringValue} até ${plano.fim.stringValue}</p>
+          <p><strong>Área Foco:</strong> ${plano.areaFoco.stringValue}</p>
+        </div>
+        <div class="box">
+          <h3>Ações</h3>
+          <p>Integração da lista de ações será feita via Firestore JS SDK</p>
+        </div>
+      `;
+    } catch (err) {
+      renderFormulario();
+    }
+  }
+
+  function renderFormulario() {
+    const appDiv = document.getElementById('app');
+    appDiv.innerHTML = `
+      <h1>Crie seu Plano de Carreira</h1>
+      <form id="formPlano" class="box">
+        <label>Título</label><input id="titulo" required>
+        <label>Objetivo</label><textarea id="objetivo"></textarea>
+        <div class="inline-inputs">
+          <div><label>Início</label><input type="date" id="inicio" /></div>
+          <div><label>Conclusão</label><input type="date" id="fim" /></div>
+        </div>
+        <label>Área Foco</label>
+        <select id="area">
+          <option>Liderança</option><option>Comunicação</option><option>Gestão de Projetos</option><option>Soft Skills</option>
+        </select><br><br>
+        <button type="submit">Salvar Plano</button>
+      </form>
+    `;
+    document.getElementById('formPlano').addEventListener('submit', salvarPlano);
+  }
+
+  async function salvarPlano(e) {
+    e.preventDefault();
+    const plano = {
+      uid: userId,
+      titulo: document.getElementById('titulo').value,
+      objetivo: document.getElementById('objetivo').value,
+      inicio: document.getElementById('inicio').value,
+      fim: document.getElementById('fim').value,
+      areaFoco: document.getElementById('area').value
+    };
+
+    await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/criarOuAtualizarPlano", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(plano)
+    });
+
+    carregarPlano();
+  }
+</script>
+</body>
+</html>
