@@ -8,7 +8,7 @@
   <script type="module" src="firebase.js"></script>
   <style>
     body { font-family: Arial, sans-serif; background-color: #230033; color: white; padding: 20px; }
-    .container { max-width: 1000px; margin: auto; }
+    .container { max-width: 1100px; margin: auto; }
     .box { background-color: #3c0066; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     label { display: block; margin-top: 12px; margin-bottom: 4px; }
     input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 1rem; }
@@ -16,6 +16,12 @@
     .inline-inputs input { flex: 1; }
     button { background-color: #E6E6FA; color: #1c0033; font-weight: bold; padding: 12px; width: 100%; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
     button:hover { background-color: #dcd0ff; }
+    table { width: 100%; border-collapse: collapse; background-color: #3c0066; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #5e2d91; font-size: 0.95rem; }
+    th { background-color: #4a007f; font-weight: bold; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+    .modal-content { background: #3c0066; padding: 20px; border-radius: 12px; width: 500px; max-width: 90%; }
+    .close { float: right; font-size: 20px; cursor: pointer; color: #ccc; }
   </style>
 </head>
 <body>
@@ -23,10 +29,28 @@
   <p>Carregando...</p>
 </div>
 
+<div class="modal" id="modalAcao">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <h3>Nova Ação</h3>
+    <label>Descrição</label><textarea id="descAcao"></textarea>
+    <label>Data Início</label><input type="date" id="inicioAcao" />
+    <label>Data Término</label><input type="date" id="fimAcao" />
+    <label>Status</label>
+    <select id="statusAcao">
+      <option value="pendente">Pendente</option>
+      <option value="em andamento">Em andamento</option>
+      <option value="concluido">Concluído</option>
+    </select>
+    <label>Indicador de Sucesso</label><input type="text" id="indicadorAcao" />
+    <br><br><button onclick="salvarAcao()">Salvar Ação</button>
+  </div>
+</div>
+
 <script type="module">
   import { auth } from './firebase.js';
   import {
-    getFirestore, doc, getDoc
+    getFirestore, doc, getDoc, collection, addDoc, getDocs
   } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
   import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
@@ -47,6 +71,7 @@
     if (snap.exists()) {
       const plano = snap.data();
       renderPainel(plano);
+      carregarAcoes();
     } else {
       renderFormulario();
     }
@@ -101,7 +126,51 @@
         <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
         <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
       </div>
+      <div class="box">
+        <h3>Ações</h3>
+        <button onclick="abrirModal()">+ Nova Ação</button>
+        <table style="margin-top: 20px;">
+          <thead>
+            <tr><th>Descrição</th><th>Início</th><th>Término</th><th>Status</th><th>Indicador</th></tr>
+          </thead>
+          <tbody id="listaAcoes"></tbody>
+        </table>
+      </div>
     `;
+  }
+
+  window.abrirModal = function () {
+    document.getElementById("modalAcao").style.display = "flex";
+  }
+
+  window.fecharModal = function () {
+    document.getElementById("modalAcao").style.display = "none";
+  }
+
+  window.salvarAcao = async function () {
+    const acao = {
+      descricao: document.getElementById("descAcao").value,
+      inicio: document.getElementById("inicioAcao").value,
+      fim: document.getElementById("fimAcao").value,
+      status: document.getElementById("statusAcao").value,
+      indicador: document.getElementById("indicadorAcao").value
+    };
+
+    await addDoc(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"), acao);
+    fecharModal();
+    carregarAcoes();
+  }
+
+  async function carregarAcoes() {
+    const tbody = document.getElementById("listaAcoes");
+    tbody.innerHTML = "";
+    const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
+    snap.forEach(doc => {
+      const acao = doc.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
+      tbody.appendChild(tr);
+    });
   }
 </script>
 </body>
