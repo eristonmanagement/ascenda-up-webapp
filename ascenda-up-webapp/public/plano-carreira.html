@@ -361,23 +361,46 @@
       }
     });
 
-    function renderFormulario() {
-      appDiv.innerHTML = `
-        <h1>Crie seu Plano de Carreira</h1>
-        <form id="formPlano" class="left-box">
-          <label>Título</label><input id="titulo" required>
-          <label>Objetivo</label><textarea id="objetivo"></textarea>
-          <label>Início</label><input type="date" id="inicio">
-          <label>Conclusão</label><input type="date" id="fim">
-          <label>Área Foco</label>
+function renderFormulario() {
+  appDiv.innerHTML = `
+    <h1 style="margin-bottom: 20px;">Crie seu Plano de Carreira</h1>
+    <div class="dashboard-layout">
+      <div class="left-box glass-panel">
+        <form id="formPlano">
+          <label for="titulo">Título</label>
+          <input id="titulo" required />
+
+          <label for="objetivo">Objetivo</label>
+          <textarea id="objetivo" rows="2"></textarea>
+
+          <label for="inicio">Início</label>
+          <input type="date" id="inicio" />
+
+          <label for="fim">Conclusão</label>
+          <input type="date" id="fim" />
+
+          <label for="area">Área Foco</label>
           <select id="area">
-            <option>Liderança</option><option>Comunicação</option><option>Gestão de Projetos</option><option>Soft Skills</option>
-          </select><br><br>
-          <button type="submit">Salvar Plano</button>
+            <option>Liderança Estratégica</option>
+            <option>Gestão de Projetos e Processos</option>
+            <option>Gestão de Pessoas e Equipes</option>
+            <option>Especialização Técnica</option>
+            <option>Carreira Internacional / Business English</option>
+            <option>Transição de Carreira ou Recolocação</option>
+            <option>Produtividade e Autogestão</option>
+            <option>Marketing Pessoal e Networking</option>
+            <option>Visão de Negócio e Mentalidade Empreendedora</option>
+            <option>Planejamento de Longo Prazo (Executivo ou Técnico Sênior)</option>
+          </select>
+
+          <button type="submit" style="margin-top: 12px;">Salvar Plano</button>
         </form>
-      `;
-      document.getElementById('formPlano').addEventListener('submit', salvarPlano);
-    }
+      </div>
+    </div>
+  `;
+  document.getElementById('formPlano').addEventListener('submit', salvarPlano);
+}
+
 
     async function salvarPlano(e) {
       e.preventDefault();
