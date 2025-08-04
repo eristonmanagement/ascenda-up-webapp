@@ -26,22 +26,18 @@
     .topbar img {
       height: 40px;
     }
-    .dashboard-layout {
-      display: flex;
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 30px;
-      flex-wrap: wrap;
     }
     .left-box {
-      flex: 1;
-      min-width: 320px;
       background-color: #3c0066;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     .right-box {
-      flex: 1;
-      min-width: 320px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -52,19 +48,6 @@
       padding: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .progress-circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 6px solid #7e57c2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin: auto;
     }
     .box-tabela {
       margin-top: 30px;
@@ -148,72 +131,57 @@
       border-radius: 6px;
       cursor: pointer;
     }
-	
-	
-	
-	
-	
-.circular-chart {
-  max-width: 120px;
-  margin: auto;
-  display: block;
-}
-
-.circle-bg {
-  fill: none;
-  stroke: #eee;
-  stroke-width: 3.8;
-}
-
-.circle {
-  fill: none;
-  stroke: url(#gradient);
-  stroke-width: 2.8;
-  stroke-linecap: round;
-  transition: stroke-dasharray 0.5s ease;
-}
-
-.percentage {
-  fill: white;
-  font-size: 0.4em;
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-
-.futuristic-gradient {
-  background: linear-gradient(145deg, #34006b, #4c00a1);
-  box-shadow: 0 0 15px rgba(120, 0, 255, 0.3);
-}
-
-.progress-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.resumo-indicadores .indicador {
-  margin: 6px 0;
-  font-size: 0.95rem;
-  padding: 4px 10px;
-  border-radius: 8px;
-  width: fit-content;
-}
-
-.indicador.total {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-}
-
-.indicador.concluido {
-  background-color: #00c85322;
-  color: #00e676;
-}
-
-.indicador.pendente {
-  background-color: #ff8a6522;
-  color: #ffab40;
-}
-	
+    .circular-chart {
+      max-width: 120px;
+      margin: auto;
+      display: block;
+    }
+    .circle-bg {
+      fill: none;
+      stroke: #eee;
+      stroke-width: 3.8;
+    }
+    .circle {
+      fill: none;
+      stroke: url(#gradient);
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.5s ease;
+    }
+    .percentage {
+      fill: white;
+      font-size: 0.4em;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+    .futuristic-gradient {
+      background: linear-gradient(145deg, #34006b, #4c00a1);
+      box-shadow: 0 0 15px rgba(120, 0, 255, 0.3);
+    }
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .resumo-indicadores .indicador {
+      margin: 6px 0;
+      font-size: 0.95rem;
+      padding: 4px 10px;
+      border-radius: 8px;
+      width: fit-content;
+    }
+    .indicador.total {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .indicador.concluido {
+      background-color: #00c85322;
+      color: #00e676;
+    }
+    .indicador.pendente {
+      background-color: #ff8a6522;
+      color: #ffab40;
+    }
   </style>
 </head>
 <body>
@@ -239,6 +207,8 @@
       <button onclick="salvarAcao()">Salvar Ação</button>
     </div>
   </div>
+
+  <!-- O restante do código JS permanece igual, pois a mudança é apenas visual -->
 
   <script type="module">
     import { auth } from './firebase.js';
