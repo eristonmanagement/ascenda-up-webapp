@@ -148,6 +148,72 @@
       border-radius: 6px;
       cursor: pointer;
     }
+	
+	
+	
+	
+	
+.circular-chart {
+  max-width: 100px;
+  margin: auto;
+  display: block;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.percentage {
+  fill: white;
+  font-size: 0.5em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.futuristic-gradient {
+  background: linear-gradient(145deg, #34006b, #4c00a1);
+  box-shadow: 0 0 15px rgba(120, 0, 255, 0.3);
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resumo-indicadores .indicador {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  padding: 4px 10px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.indicador.total {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.indicador.concluido {
+  background-color: #00c85322;
+  color: #00e676;
+}
+
+.indicador.pendente {
+  background-color: #ff8a6522;
+  color: #ffab40;
+}
+	
   </style>
 </head>
 <body>
@@ -256,6 +322,8 @@
             <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
             <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
           </div>
+		  
+		  <!--
           <div class="right-box" id="painelResumo">
             <div class="card">
               <div class="progress-circle" id="percentual">--%</div>
@@ -263,6 +331,40 @@
             </div>
             <div class="card" id="resumoTotais">Ações: carregando...</div>
           </div>
+		  -->
+		  
+		  <!----------------------------Dashboard------------------------------------------>
+		  
+<div class="right-box" id="painelResumo">
+  <div class="card futuristic-gradient">
+    <div class="progress-container">
+      <svg viewBox="0 0 36 36" class="circular-chart">
+        <path class="circle-bg"
+              d="M18 2.0845
+                 a 15.9155 15.9155 0 0 1 0 31.831
+                 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        <path class="circle"
+              id="circlePath"
+              stroke-dasharray="0, 100"
+              d="M18 2.0845
+                 a 15.9155 15.9155 0 0 1 0 31.831
+                 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                 <text x="18" y="20.35" class="percentage" id="percentText">--%</text>
+             </svg>
+                 <p style="margin-top: 8px; color: #ccc; font-size: 0.9rem;">Progresso</p>
+             </div>
+        </div>
+
+             <div class="card resumo-indicadores" id="resumoTotais">
+                  <div class="indicador total"><strong id="totalAcoes">--</strong> ações totais</div>
+                  <div class="indicador concluido"><strong id="concluidas">--</strong> concluídas</div>
+                  <div class="indicador pendente"><strong id="pendentes">--</strong> pendentes/em andamento</div>
+             </div>
+         </div>
+        <!---------------------------------------------------------------------------------->
+		  
+		  
+		  
         </div>
         <div class="box-tabela">
           <h3>Ações</h3>
@@ -304,28 +406,45 @@
       carregarAcoes();
     }
 
-    async function carregarAcoes() {
-      const tbody = document.getElementById("listaAcoes");
-      tbody.innerHTML = "";
-      const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
-      let total = 0, concluidos = 0;
+async function carregarAcoes() {
+  const tbody = document.getElementById("listaAcoes");
+  tbody.innerHTML = "";
+  const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
+  let total = 0, concluidos = 0;
 
-      snap.forEach(doc => {
-        const acao = doc.data();
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
-        tbody.appendChild(tr);
+  snap.forEach(doc => {
+    const acao = doc.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
+    tbody.appendChild(tr);
 
-        total++;
-        if (acao.status === 'concluido') concluidos++;
-      });
+    total++;
+    if (acao.status === 'concluido') concluidos++;
+  });
 
-      if (total > 0) {
-        const percentual = Math.round((concluidos / total) * 100);
-        document.getElementById("percentual").textContent = percentual + "%";
-        document.getElementById("resumoTotais").innerHTML = `<p style='margin: 0; font-size: 1.1rem'><strong>${total}</strong> ações totais</p><p style='margin: 2px 0'><strong>${concluidos}</strong> concluídas</p><p style='margin: 2px 0'><strong>${total - concluidos}</strong> pendentes/em andamento</p>`;
-      }
-    }
+  // Atualiza dashboard futurista
+  if (total > 0) {
+    const percentual = Math.round((concluidos / total) * 100);
+
+    // Atualiza o texto dentro do círculo
+    const percentText = document.getElementById("percentText");
+    if (percentText) percentText.textContent = percentual + "%";
+
+    // Atualiza o traçado do SVG
+    const circlePath = document.getElementById("circlePath");
+    if (circlePath) circlePath.setAttribute("stroke-dasharray", `${percentual}, 100`);
+
+    // Atualiza os indicadores com ID individual
+    const totalAcoesEl = document.getElementById("totalAcoes");
+    const concluidasEl = document.getElementById("concluidas");
+    const pendentesEl = document.getElementById("pendentes");
+
+    if (totalAcoesEl) totalAcoesEl.textContent = total;
+    if (concluidasEl) concluidasEl.textContent = concluidos;
+    if (pendentesEl) pendentesEl.textContent = total - concluidos;
+  }
+}
+
   </script>
 </body>
 </html>
