@@ -250,16 +250,21 @@
 
 
 .btn-top {
-  background-color: #E6E6FA;
-  color: #1c0033;
-  border: none;
-  border-radius: 8px;
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   padding: 6px 12px;
-  font-weight: bold;
-  margin-left: 10px;
-  cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
 }
+
+.btn-top:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 
 
 </style>
@@ -564,7 +569,9 @@ window.salvarEdicaoPlano = async function () {
 
   fecharModalEditar();
   renderPainel(novoPlano);
+  carregarAcoes();          
   planoGlobal = novoPlano;
+
 };
 
 
