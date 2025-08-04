@@ -26,18 +26,22 @@
     .topbar img {
       height: 40px;
     }
-    .grid-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .dashboard-layout {
+      display: flex;
       gap: 30px;
+      flex-wrap: wrap;
     }
     .left-box {
+      flex: 1;
+      min-width: 320px;
       background-color: #3c0066;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     .right-box {
+      flex: 1;
+      min-width: 320px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -48,6 +52,19 @@
       padding: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .progress-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 6px solid #7e57c2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: auto;
     }
     .box-tabela {
       margin-top: 30px;
@@ -131,57 +148,72 @@
       border-radius: 6px;
       cursor: pointer;
     }
-    .circular-chart {
-      max-width: 120px;
-      margin: auto;
-      display: block;
-    }
-    .circle-bg {
-      fill: none;
-      stroke: #eee;
-      stroke-width: 3.8;
-    }
-    .circle {
-      fill: none;
-      stroke: url(#gradient);
-      stroke-width: 2.8;
-      stroke-linecap: round;
-      transition: stroke-dasharray 0.5s ease;
-    }
-    .percentage {
-      fill: white;
-      font-size: 0.4em;
-      text-anchor: middle;
-      dominant-baseline: middle;
-    }
-    .futuristic-gradient {
-      background: linear-gradient(145deg, #34006b, #4c00a1);
-      box-shadow: 0 0 15px rgba(120, 0, 255, 0.3);
-    }
-    .progress-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .resumo-indicadores .indicador {
-      margin: 6px 0;
-      font-size: 0.95rem;
-      padding: 4px 10px;
-      border-radius: 8px;
-      width: fit-content;
-    }
-    .indicador.total {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-    .indicador.concluido {
-      background-color: #00c85322;
-      color: #00e676;
-    }
-    .indicador.pendente {
-      background-color: #ff8a6522;
-      color: #ffab40;
-    }
+	
+	
+	
+	
+	
+.circular-chart {
+  max-width: 120px;
+  margin: auto;
+  display: block;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.percentage {
+  fill: white;
+  font-size: 0.4em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.futuristic-gradient {
+  background: linear-gradient(145deg, #34006b, #4c00a1);
+  box-shadow: 0 0 15px rgba(120, 0, 255, 0.3);
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resumo-indicadores .indicador {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  padding: 4px 10px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.indicador.total {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.indicador.concluido {
+  background-color: #00c85322;
+  color: #00e676;
+}
+
+.indicador.pendente {
+  background-color: #ff8a6522;
+  color: #ffab40;
+}
+	
   </style>
 </head>
 <body>
@@ -207,8 +239,6 @@
       <button onclick="salvarAcao()">Salvar Ação</button>
     </div>
   </div>
-
-  <!-- O restante do código JS permanece igual, pois a mudança é apenas visual -->
 
   <script type="module">
     import { auth } from './firebase.js';
@@ -285,65 +315,13 @@
     function renderPainel(plano) {
       appDiv.innerHTML = `
         <h1 style="margin-bottom: 12px; font-size: 2rem; font-weight: 700;">${nome}</h1>
-<div style="display: flex; gap: 30px; flex-wrap: wrap;">
-  <!-- COLUNA ESQUERDA: Dados do plano -->
-  <div style="flex: 1; min-width: 320px;" class="left-box">
-    <p><strong>Título:</strong> ${plano.titulo}</p>
-    <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
-    <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
-    <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
-  </div>
-
-  <!-- COLUNA DIREITA: Gráfico + Indicadores + Tabela -->
-  <div style="flex: 2; min-width: 480px; display: flex; flex-direction: column; gap: 20px;">
-    <!-- Linha superior: gráfico + indicadores -->
-    <div style="display: flex; gap: 20px;">
-      <div class="card futuristic-gradient" style="flex: 1;">
-        <div class="progress-container">
-          <svg viewBox="0 0 36 36" class="circular-chart">
-            <defs>
-              <linearGradient id="gradient" x1="1" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ff4d4d"/>
-                <stop offset="100%" stop-color="#00e676"/>
-              </linearGradient>
-            </defs>
-            <path class="circle-bg"
-              d="M18 2.0845
-                 a 15.9155 15.9155 0 0 1 0 31.831
-                 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="circle"
-              id="circlePath"
-              stroke-dasharray="0, 100"
-              d="M18 2.0845
-                 a 15.9155 15.9155 0 0 1 0 31.831
-                 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <text x="18" y="20.35" class="percentage" id="percentText">--%</text>
-          </svg>
-          <p style="margin-top: 8px; color: #ccc; font-size: 0.9rem;">Progresso</p>
-        </div>
-      </div>
-
-      <div class="card resumo-indicadores" style="flex: 1;">
-        <div class="indicador total"><strong id="totalAcoes">--</strong> ações totais</div>
-        <div class="indicador concluido"><strong id="concluidas">--</strong> concluídas</div>
-        <div class="indicador pendente"><strong id="pendentes">--</strong> pendentes/em andamento</div>
-      </div>
-    </div>
-
-    <!-- Lista de Ações -->
-    <div class="box-tabela">
-      <h3>Ações</h3>
-      <button class="btn-nova-acao" onclick="abrirModal()">+ Nova Ação</button>
-      <table style="margin-top: 10px;">
-        <thead>
-          <tr><th>Descrição</th><th>Início</th><th>Término</th><th>Status</th><th>Indicador</th></tr>
-        </thead>
-        <tbody id="listaAcoes"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
+        <div class="dashboard-layout">
+          <div class="left-box">
+            <p><strong>Título:</strong> ${plano.titulo}</p>
+            <p><strong>Objetivo:</strong> ${plano.objetivo}</p>
+            <p><strong>Período:</strong> ${plano.inicio} até ${plano.fim}</p>
+            <p><strong>Área Foco:</strong> ${plano.areaFoco}</p>
+          </div>
 		 
 		  
 		  
