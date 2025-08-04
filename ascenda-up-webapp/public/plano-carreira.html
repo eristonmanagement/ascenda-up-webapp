@@ -478,19 +478,29 @@
       document.getElementById("modalAcao").style.display = "none";
     }
 
-    window.salvarAcao = async function () {
-      const acao = {
-        descricao: document.getElementById("descAcao").value,
-        inicio: document.getElementById("inicioAcao").value,
-        fim: document.getElementById("fimAcao").value,
-        status: document.getElementById("statusAcao").value,
-        indicador: document.getElementById("indicadorAcao").value
-      };
+    let idAcaoEmEdicao = null;
 
-      await addDoc(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"), acao);
-      fecharModal();
-      carregarAcoes();
-    }
+    window.salvarAcao = async function () {
+           const acao = {
+           descricao: document.getElementById("descAcao").value,
+           inicio: document.getElementById("inicioAcao").value,
+           fim: document.getElementById("fimAcao").value,
+           status: document.getElementById("statusAcao").value,
+           indicador: document.getElementById("indicadorAcao").value
+        };
+
+         if (idAcaoEmEdicao) {
+              const ref = doc(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes", idAcaoEmEdicao);
+              await updateDoc(ref, acao);
+            } else {
+           await addDoc(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"), acao);
+            }
+
+         idAcaoEmEdicao = null;
+         fecharModal();
+         carregarAcoes();
+    };
+
 
 async function carregarAcoes() {
   const tbody = document.getElementById("listaAcoes");
@@ -501,7 +511,11 @@ async function carregarAcoes() {
   snap.forEach(doc => {
     const acao = doc.data();
     const tr = document.createElement("tr");
+	
     tr.innerHTML = `<td>${acao.descricao}</td><td>${acao.inicio}</td><td>${acao.fim}</td><td>${acao.status}</td><td>${acao.indicador}</td>`;
+    tr.style.cursor = "pointer";
+    tr.onclick = () => editarAcao(doc.id, acao);	
+	
     tbody.appendChild(tr);
 
     total++;
@@ -572,6 +586,17 @@ window.salvarEdicaoPlano = async function () {
   carregarAcoes();          
   planoGlobal = novoPlano;
 
+};
+
+
+window.editarAcao = function (id, acao) {
+  idAcaoEmEdicao = id;
+  document.getElementById("descAcao").value = acao.descricao;
+  document.getElementById("inicioAcao").value = acao.inicio;
+  document.getElementById("fimAcao").value = acao.fim;
+  document.getElementById("statusAcao").value = acao.status;
+  document.getElementById("indicadorAcao").value = acao.indicador;
+  document.getElementById("modalAcao").style.display = "flex";
 };
 
 
