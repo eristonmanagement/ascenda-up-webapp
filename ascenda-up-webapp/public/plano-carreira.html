@@ -249,13 +249,35 @@
 }
 
 
+.btn-top {
+  background-color: #E6E6FA;
+  color: #1c0033;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: bold;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
 
-	
-  </style>
+
+</style>
+
+
 </head>
 <body>
+
   <div class="container">
-    <div class="topbar"><img src="/icon.png" alt="Ascenda Up"></div>
+    
+     <div class="topbar">
+      <img src="/icon.png" alt="Ascenda Up" style="height: 40px; margin-right: 20px;" />
+         <div style="flex: 1;"></div>
+         <button onclick="window.location.href='Chat.html'" class="btn-top">Voltar para o Guia</button>
+         <button onclick="abrirModalEditar()" class="btn-top">Editar Plano</button>
+     </div>
+	 
+	
     <div id="app"><p>Carregando...</p></div>
   </div>
 
@@ -276,6 +298,29 @@
       <button onclick="salvarAcao()">Salvar Ação</button>
     </div>
   </div>
+  
+  
+ <!-- Modal atualizar Plano de Carreira -->
+<div class="modal" id="modalEditar">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModalEditar()">&times;</span>
+    <h3>Editar Plano de Carreira</h3>
+    <label>Título</label><input id="editTitulo">
+    <label>Objetivo</label><textarea id="editObjetivo" rows="2"></textarea>
+    <label>Início</label><input type="date" id="editInicio">
+    <label>Conclusão</label><input type="date" id="editFim">
+    <label>Área Foco</label>
+    <select id="editArea">
+      <option>Liderança</option>
+      <option>Comunicação</option>
+      <option>Gestão de Projetos</option>
+      <option>Soft Skills</option>
+    </select>
+    <button onclick="salvarEdicaoPlano()">Salvar Alterações</button>
+  </div>
+</div>
+  
+  
 
   <script type="module">
     import { auth } from './firebase.js';
@@ -350,6 +395,7 @@
     }
 
     function renderPainel(plano) {
+      planoGlobal = plano;
       appDiv.innerHTML = `
         <h1 style="margin-bottom: 12px; font-size: 2rem; font-weight: 700;">${nome}</h1>
         <div class="dashboard-layout">
@@ -479,6 +525,48 @@ async function carregarAcoes() {
     if (pendentesEl) pendentesEl.textContent = total - concluidos;
   }
 }
+
+
+
+
+
+
+let planoGlobal = null;
+
+window.abrirModalEditar = function () {
+  document.getElementById("editTitulo").value = planoGlobal.titulo;
+  document.getElementById("editObjetivo").value = planoGlobal.objetivo;
+  document.getElementById("editInicio").value = planoGlobal.inicio;
+  document.getElementById("editFim").value = planoGlobal.fim;
+  document.getElementById("editArea").value = planoGlobal.areaFoco;
+  document.getElementById("modalEditar").style.display = "flex";
+};
+
+window.fecharModalEditar = function () {
+  document.getElementById("modalEditar").style.display = "none";
+};
+
+window.salvarEdicaoPlano = async function () {
+  const novoPlano = {
+    email,
+    titulo: document.getElementById('editTitulo').value,
+    objetivo: document.getElementById('editObjetivo').value,
+    inicio: document.getElementById('editInicio').value,
+    fim: document.getElementById('editFim').value,
+    areaFoco: document.getElementById('editArea').value
+  };
+
+  await fetch("https://us-central1-ascendaup-app.cloudfunctions.net/criarOuAtualizarPlano", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(novoPlano)
+  });
+
+  fecharModalEditar();
+  renderPainel(novoPlano);
+  planoGlobal = novoPlano;
+};
+
 
   </script>
 </body>
