@@ -204,12 +204,12 @@
   color: #ffffff;
 }
 
-.indicador.concluido {
+.indicador.Concluido {
   background-color: #00c85322;
   color: #00e676;
 }
 
-.indicador.pendente {
+.indicador.Pendente {
   background-color: #ff8a6522;
   color: #ffab40;
 }
@@ -295,9 +295,9 @@
       <label>Data Término</label><input type="date" id="fimAcao" />
       <label>Status</label>
       <select id="statusAcao">
-        <option value="pendente">Pendente</option>
-        <option value="em andamento">Em andamento</option>
-        <option value="concluido">Concluído</option>
+        <option value="Pendente">Pendente</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Concluido">Concluído</option>
       </select>
       <label>Indicador de Sucesso</label><input type="text" id="indicadorAcao" />
       <button onclick="salvarAcao()">Salvar Ação</button>
@@ -444,8 +444,8 @@
 
              <div class="card glass-panel resumo-indicadores" id="resumoTotais">
                   <div class="indicador total"><strong id="totalAcoes">--</strong> ações totais</div>
-                  <div class="indicador concluido"><strong id="concluidas">--</strong> concluídas</div>
-                  <div class="indicador pendente"><strong id="pendentes">--</strong> pendentes/em andamento</div>
+                  <div class="indicador Concluido"><strong id="concluidas">--</strong> concluídas</div>
+                  <div class="indicador Pendente"><strong id="Pendentes">--</strong> Pendentes/Em andamento</div>
              </div>
          </div>
         <!---------------------------------------------------------------------------------->
@@ -469,7 +469,7 @@
       document.getElementById("descAcao").value = "";
       document.getElementById("inicioAcao").value = "";
       document.getElementById("fimAcao").value = "";
-      document.getElementById("statusAcao").value = "pendente";
+      document.getElementById("statusAcao").value = "Pendente";
       document.getElementById("indicadorAcao").value = "";
       document.getElementById("modalAcao").style.display = "flex";
     }
@@ -496,7 +496,7 @@ async function carregarAcoes() {
   const tbody = document.getElementById("listaAcoes");
   tbody.innerHTML = "";
   const snap = await getDocs(collection(db, "usuarios", email, "planosDeAcao", "planoUnico", "acoes"));
-  let total = 0, concluidos = 0;
+  let total = 0, Concluidos = 0;
 
   snap.forEach(doc => {
     const acao = doc.data();
@@ -505,12 +505,12 @@ async function carregarAcoes() {
     tbody.appendChild(tr);
 
     total++;
-    if (acao.status === 'concluido') concluidos++;
+    if (acao.status === 'Concluido') Concluidos++;
   });
 
   // Atualiza dashboard futurista
   if (total > 0) {
-    const percentual = Math.round((concluidos / total) * 100);
+    const percentual = Math.round((Concluidos / total) * 100);
 
     // Atualiza o texto dentro do círculo
     const percentText = document.getElementById("percentText");
@@ -523,11 +523,11 @@ async function carregarAcoes() {
     // Atualiza os indicadores com ID individual
     const totalAcoesEl = document.getElementById("totalAcoes");
     const concluidasEl = document.getElementById("concluidas");
-    const pendentesEl = document.getElementById("pendentes");
+    const PendentesEl = document.getElementById("Pendentes");
 
     if (totalAcoesEl) totalAcoesEl.textContent = total;
-    if (concluidasEl) concluidasEl.textContent = concluidos;
-    if (pendentesEl) pendentesEl.textContent = total - concluidos;
+    if (concluidasEl) concluidasEl.textContent = Concluidos;
+    if (PendentesEl) PendentesEl.textContent = total - Concluidos;
   }
 }
 
