@@ -400,16 +400,17 @@
 
     function renderPainel(plano) {
       planoGlobal = plano;
+	  const inicioFormatado = new Date(plano.inicio).toLocaleDateString('pt-BR');
+      const fimFormatado = new Date(plano.fim).toLocaleDateString('pt-BR');
       appDiv.innerHTML = `
-        <h1 style="margin-bottom: 12px; font-size: 2rem; font-weight: 700;">${nome}</h1>
-        <div class="dashboard-layout">
-            <div class="left-box glass-panel">
-                 <h2 class="plano-titulo">${plano.titulo}</h2>
-                 <p><strong>🎯 Objetivo:</strong> ${plano.objetivo}</p>
-                 <p><strong>📅 Período:</strong> ${plano.inicio} até ${plano.fim}</p>
-                 <p><strong>🧭 Área Foco:</strong> ${plano.areaFoco}</p>
-            </div>
-
+      <h1 style="margin-bottom: 12px; font-size: 2rem; font-weight: 700;">${nome}</h1>
+      <div class="dashboard-layout">
+         <div class="left-box glass-panel">
+            <h2 class="plano-titulo">${plano.titulo}</h2>
+            <p><strong>🎯 Objetivo:</strong> ${plano.objetivo}</p>
+            <p><strong>📅 Período:</strong> ${inicioFormatado} até ${fimFormatado}</p>
+         <p><strong>🧭 Área Foco:</strong> ${plano.areaFoco}</p>
+      </div>
 		  
 		  
 <div class="right-box" id="painelResumo">
