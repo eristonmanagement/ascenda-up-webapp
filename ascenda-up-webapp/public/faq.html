@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — Ascenda Up</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#1c0033;
+      --panel:#100021;
+      --panel-2:#2a004a;
+      --text:#ffffff;
+      --muted:#cfc5ff;
+      --accent:#E6E6FA;
+      --cta:#5f27cd;
+      --cta-hover:#7a39ff;
+      --outline:#3d0a66;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background-color:var(--bg);
+      color:var(--text);
+      padding:2rem 1rem;
+    }
+    header{
+      max-width:1100px; margin:0 auto 1rem; display:flex; align-items:center; gap:.75rem;
+    }
+    header img{max-height:40px}
+    header h1{margin:0; font-size:1.6rem; color:var(--accent)}
+    main{max-width:1100px; margin:0 auto}
+    .hero{
+      background:linear-gradient(180deg, #23003a 0%, #19002a 100%);
+      border:1px solid var(--outline);
+      border-radius:16px; padding:28px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      margin-bottom:24px;
+    }
+    .hero h2{margin:0 0 .5rem; font-size:1.9rem; color:#fff}
+    .hero p{margin:.25rem 0; color:var(--muted)}
+    .cta{
+      display:inline-block; margin-top:14px; background:var(--cta); color:#fff; padding:12px 18px; border-radius:999px;
+      text-decoration:none; font-weight:600; transition:.2s ease;
+    }
+    .cta:hover{background:var(--cta-hover); transform:translateY(-1px)}
+    .grid{
+      display:grid; gap:16px; grid-template-columns:repeat(12,1fr);
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--outline);
+      border-radius:14px; padding:20px;
+      box-shadow:0 8px 24px rgba(0,0,0,.18);
+    }
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:900px){
+      .span-6{grid-column:span 12}
+    }
+    h3{margin:.2rem 0 .8rem; color:var(--accent)}
+    .muted{color:var(--muted)}
+    /* FAQ */
+    details{
+      background:var(--panel-2);
+      border:1px solid var(--outline);
+      border-radius:12px; padding:14px 16px; margin:10px 0;
+    }
+    summary{
+      list-style:none; cursor:pointer; font-weight:600; color:#fff; position:relative; padding-right:26px;
+    }
+    summary::marker{display:none}
+    summary::-webkit-details-marker{display:none}
+    details summary::after{
+      content:"＋"; position:absolute; right:0; top:0; color:var(--muted); font-weight:700;
+    }
+    details[open] summary::after{content:"－"}
+    details p{margin:.6rem 0 0; color:var(--muted); line-height:1.7}
+    .kpi{
+      display:flex; gap:16px; flex-wrap:wrap; margin-top:8px;
+    }
+    .pill{
+      background:#2a004a; color:#fff; border:1px solid var(--outline); padding:8px 12px; border-radius:999px; font-size:.9rem;
+    }
+    footer{
+      text-align:center; font-size:.85rem; padding:2rem 1rem; background-color:var(--panel); color:#ccc; margin-top:2rem;
+      border-top:1px solid var(--outline);
+    }
+    footer a{color:#E6E6FA; text-decoration:none}
+    footer a:hover{text-decoration:underline}
+    a.inline{color:#E6E6FA}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="icon.png" alt="Ascenda Up — Logo">
+    <h1>FAQ — Perguntas Frequentes</h1>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <h2>Tire suas dúvidas e comece com confiança</h2>
+      <p>O Ascenda Up é seu guia profissional 24h para acelerar sua carreira com direção, foco e prática.</p>
+      <a class="cta" href="https://buy.stripe.com/cNi3cu43I6qFe1p9Cg8g00a">Quero meu acesso agora</a>
+    </section>
+
+    <!-- O QUE É / COMO FUNCIONA -->
+    <section class="grid">
+      <article class="card span-6">
+        <h3>O que é o Ascenda Up?</h3>
+        <p class="muted">
+          O Ascenda Up é uma plataforma de orientação de carreira com IA, que combina um <strong>Guia Profissional 24h</strong>,
+          uma <strong>Trilha de Ação (PDI)</strong> simples e visual, e um <strong>acervo de conteúdo de elite</strong> curado de referências globais.
+        </p>
+        <div class="kpi">
+          <span class="pill">Guia 24h (PT/EN)</span>
+          <span class="pill">Trilha de Ação</span>
+          <span class="pill">Conteúdo de Elite</span>
+          <span class="pill">Pronto no celular</span>
+        </div>
+      </article>
+
+      <article class="card span-6">
+        <h3>Como funciona na prática?</h3>
+        <p class="muted">
+          Em três passos: <br>
+          1) Faça o pagamento único anual e receba seu bônus;<br>
+          2) Complete seu cadastro em 1 minuto;<br>
+          3) Comece a conversar com o Guia, crie sua Trilha e execute ações semanais com acompanhamento.
+        </p>
+      </article>
+
+      <article class="card span-6">
+        <h3>O Guia Profissional (IA)</h3>
+        <p class="muted">
+          Você conversa com o <strong>Gui</strong> em linguagem natural (português ou inglês). Ele ajuda a estruturar objetivos,
+          preparar apresentações, treinar comunicação para reuniões/entrevistas, e aplicar boas práticas de gestão, liderança e produtividade.
+        </p>
+      </article>
+
+      <article class="card span-6">
+        <h3>Trilha e Plano de Ação</h3>
+        <p class="muted">
+          A <strong>Trilha</strong> (PDI) organiza seus objetivos em ações claras com prazo, status e indicadores. Você acompanha o progresso em um painel
+          visual e pode ajustar a rota com o apoio do Guia sempre que precisar.
+        </p>
+      </article>
+    </section>
+
+    <!-- FAQ -->
+    <section class="card span-12" style="margin-top:16px;">
+      <h3>Perguntas Frequentes</h3>
+
+      <details>
+        <summary>O acesso é mesmo por 12 meses?</summary>
+        <p>Sim. O acesso é liberado por <strong>12 meses</strong> a partir da confirmação do pagamento único anual.</p>
+      </details>
+
+      <details>
+        <summary>Como recebo meu bônus?</summary>
+        <p>Após a confirmação do pagamento você recebe um e‑mail com o link para baixar o <strong>Roteiro Estratégico de Carreira</strong>.
+           Se não encontrar, verifique a caixa de spam ou escreva para <a class="inline" href="mailto:contato@ascendaup.com.br">contato@ascendaup.com.br</a>.</p>
+      </details>
+
+      <details>
+        <summary>Preciso instalar algo?</summary>
+        <p>Não. O Ascenda Up é 100% web. Basta acessar pelo navegador no computador ou celular.</p>
+      </details>
+
+      <details>
+        <summary>Posso acessar do celular?</summary>
+        <p>Sim. Toda a experiência é otimizada para dispositivos móveis para você avançar na carreira de onde estiver.</p>
+      </details>
+
+      <details>
+        <summary>Como funciona a renovação?</summary>
+        <p>O acesso é de <strong>pagamento único anual</strong>. Não há renovação automática. Quando o período estiver terminando, você poderá optar por renovar.</p>
+      </details>
+
+      <details>
+        <summary>O que o Guia consegue fazer por mim?</summary>
+        <p>Ele ajuda a definir metas, destravar decisões, preparar reuniões e apresentações, treinar Business English, revisar textos profissionais,
+           sugerir caminhos de desenvolvimento e transformar objetivos em ações concretas na sua Trilha.</p>
+      </details>
+
+      <details>
+        <summary>Como funciona a Trilha (PDI) e as Ações?</summary>
+        <p>Você registra um objetivo e cria ações com data de início e fim, status e indicador de sucesso. O painel mostra seu progresso e o Guia sugere ajustes para manter o ritmo.</p>
+      </details>
+
+      <details>
+        <summary>Quais áreas profissionais se beneficiam?</summary>
+        <p>Profissionais de diferentes áreas (gestão, operações, tecnologia, finanças, marketing, RH e muito mais) usam o Ascenda Up para acelerar resultados e evolução de carreira.</p>
+      </details>
+
+      <details>
+        <summary>O pagamento é seguro?</summary>
+        <p>Sim. O checkout é processado pelo <strong>Stripe</strong>, plataforma global de pagamentos, com ambiente seguro (SSL) e compatível com os principais cartões.</p>
+      </details>
+
+      <details>
+        <summary>Consigo falar com suporte?</summary>
+        <p>Claro. Fale com a gente pelo e‑mail <a class="inline" href="mailto:contato@ascendaup.com.br">contato@ascendaup.com.br</a>. Respondemos o mais rápido possível.</p>
+      </details>
+
+      <div style="margin-top:16px;">
+        <a class="cta" href="https://buy.stripe.com/cNi3cu43I6qFe1p9Cg8g00a">Quero meu acesso agora</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p style="line-height:1.8;">
+      <a href="termos-de-uso.html">Termos de Uso</a> ·
+      <a href="politica-de-privacidade.html">Política de Privacidade</a> ·
+      <a href="aviso-legal.html">Aviso Legal</a><br>
+      <span style="display:inline-block; margin-top:.3rem;">Todos os direitos reservados</span>
+    </p>
+  </footer>
+</body>
+</html>
