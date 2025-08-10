@@ -424,13 +424,25 @@
   color: #ff7070;
   font-weight: bold;
 }
+
+ .depo-grid{
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;      /* mobile: 1 coluna */
+  }
+  @media (min-width: 900px){
+    .depo-grid{
+      grid-template-columns: 1fr 1fr; /* desktop: 2 colunas */
+    }
+  }
+
 </style>
 
 
 <section style="background-color: #1a0030; padding: 40px; border-radius: 12px; max-width: 900px; margin: 40px auto; color: white;">
   <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 30px;">O que dizem nossos usuários</h2>
   
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+  <div class="depo-grid">
     
     <div style="background-color: #2a004a; padding: 20px; border-radius: 8px;">
       <p style="font-size: 1.2rem; color: #FFD700;">⭐⭐⭐⭐⭐</p>
